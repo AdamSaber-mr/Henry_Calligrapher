@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+/* Design tokens taken verbatim from the original site's compiled stylesheet. */
+:root {
+  --radius: 0rem;
+  --background: oklch(97.3% 0.008 85);
+  --foreground: oklch(23% 0.012 60);
+  --card: oklch(98.5% 0.006 85);
+  --card-foreground: oklch(23% 0.012 60);
+  --popover: oklch(98.5% 0.006 85);
+  --popover-foreground: oklch(23% 0.012 60);
+  --primary: oklch(23% 0.012 60);
+  --primary-foreground: oklch(97.3% 0.008 85);
+  --secondary: oklch(94.1% 0.011 85);
+  --secondary-foreground: oklch(23% 0.012 60);
+  --muted: oklch(94.1% 0.011 85);
+  --muted-foreground: oklch(50% 0.014 65);
+  --accent: oklch(38% 0.152 18.6);
+  --accent-foreground: oklch(97.3% 0.008 85);
+  --destructive: oklch(57.7% 0.245 27.325);
+  --destructive-foreground: oklch(98.4% 0.003 247.858);
+  --border: oklch(88.5% 0.012 85);
+  --input: oklch(88.5% 0.012 85);
+  --ring: oklch(38% 0.152 18.6);
+}
+
+@theme inline {
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: "Karla", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+}
+
+body {
+  background-color: var(--color-background);
+  background-image: url("/images/linen-texture.jpg");
+  background-repeat: repeat;
+  background-size: 520px 520px;
+  background-blend-mode: multiply;
+  color: var(--color-foreground);
+}
+
+/* --------------------------------------------------------------------------
+ * v2 additions.
+ *
+ * These use theme keys that v1 never references, so the 1:1 replica at `/`
+ * cannot be affected by anything below. Behavioural rules are scoped to
+ * `[data-version='v2']`, which only LayoutV2 sets on <html>.
+ * -------------------------------------------------------------------------- */
+
+@theme {
+  /* Fluid type — removes the hard jump between text-3xl and md:text-6xl. */
+  --text-display: clamp(2.25rem, 1rem + 3.8vw, 3.5rem);
+  --text-display--line-height: 1.05;
+  --text-headline: clamp(1.75rem, 1.15rem + 2.4vw, 2.5rem);
+  --text-headline--line-height: 1.15;
+  --text-title: clamp(1.375rem, 1.05rem + 1.3vw, 1.875rem);
+  --text-title--line-height: 1.25;
+  --text-lead: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lead--line-height: 1.7;
+
+  /* Small caps labels. 0.7rem was 11.2px — too small to read comfortably on a phone. */
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.5;
+
+  /* Body copy inside cards and lists, kept at 16px on every screen. */
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;
+
+  /* Section rhythm, replacing the fixed py-24. */
+  --spacing-section: clamp(3.25rem, 8vw, 7rem);
+
+  /* Warm shadows tinted with the brown foreground rather than pure black. */
+  --shadow-soft: 0 1px 2px oklch(23% 0.012 60 / 0.04), 0 8px 24px oklch(23% 0.012 60 / 0.06);
+  --shadow-lift: 0 2px 4px oklch(23% 0.012 60 / 0.05), 0 16px 40px oklch(23% 0.012 60 / 0.1);
+}
+
+[data-version='v2'] {
+  scroll-behavior: smooth;
+}
+
+/* v1 dekt de linnen-textuur af met een dekkende wrapper (dode CSS in het origineel).
+   v2 laat hem doorschijnen, maar sterk verzwakt met een crème waas erover — op vol
+   vermogen zijn de tegelnaden van de bitmap zichtbaar. */
+[data-version='v2'] body {
+  background-image:
+    linear-gradient(oklch(97.3% 0.008 85 / 0.86), oklch(97.3% 0.008 85 / 0.86)),
+    url('/images/linen-texture.jpg');
+  background-repeat: repeat, repeat;
+  background-size: auto, 300px 300px;
+  background-blend-mode: normal, multiply;
+}
+
+/* Keep anchor targets clear of the sticky header. */
+[data-version='v2'] :target {
+  scroll-margin-top: 6rem;
+}
+
+/* Scroll reveal. Elements start hidden only when JS is available to reveal them,
+   so the page stays readable with JavaScript disabled. */
+[data-version='v2'] [data-reveal] {
+  opacity: 1;
+}
+
+[data-version='v2'].js [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-version='v2'].js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-version='v2'] {
+    scroll-behavior: auto;
+  }
+
+  [data-version='v2'].js [data-reveal],
+  [data-version='v2'].js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Read more --------------------------------------------------------------
+   Long passages collapse on phones only. Everything is scoped to `.js` so a
+   visitor without JavaScript gets the full text and no dead button. The fade is
+   a mask rather than a gradient overlay, because the page sits on a linen
+   texture that a solid overlay colour could not match. */
+
+[data-version='v2'] .readmore-toggle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  [data-version='v2'].js .readmore-content {
+    max-height: var(--readmore-max, 15rem);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  }
+
+  [data-version='v2'].js .readmore[data-expanded] .readmore-content {
+    max-height: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  [data-version='v2'].js .readmore-toggle {
+    display: inline-flex;
+  }
+
+  /* Passage already fits, so there is nothing to reveal. */
+  [data-version='v2'].js .readmore[data-fits] .readmore-content {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  [data-version='v2'].js .readmore[data-fits] .readmore-toggle {
+    display: none;
+  }
+
+  [data-version='v2'].js .readmore[data-expanded] .readmore-chevron {
+    transform: rotate(180deg);
+  }
+}
+
+[data-version='v2'] .readmore-chevron {
+  transition: transform 0.25s ease;
+}

@@ -1,0 +1,78 @@
+---
+import LayoutV2 from '../../layouts/LayoutV2.astro';
+import PageHeader from '../../components/v2/PageHeader.astro';
+import Section from '../../components/v2/Section.astro';
+import ContactForm from '../../components/v2/ContactForm.astro';
+import { email, expectations, instagramUrl } from '../../data/content';
+---
+
+<LayoutV2
+  title="Contact — Henry Calligraphy"
+  description="Start a bespoke calligraphy, engraving or hot foil commission with Isha Henry-Hament, calligrapher based in Breda, the Netherlands."
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Let's talk about your commission"
+    lead="Every commission is bespoke and begins with an enquiry. Tell me about the occasion, the pieces and the date, and you'll receive a tailored proposal."
+  />
+
+  {/* No intermediate step — the form is the first thing on the page. Deep links from
+      elsewhere still arrive here with ?subject=… and the select picks it up. */}
+  <Section id="form" divider={false}>
+    <div class="grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+      <div data-reveal>
+        <h2 class="font-serif text-headline">Send a message</h2>
+        <p class="mt-4 max-w-lg font-sans text-lead text-muted-foreground">
+          The more you can share about the occasion, quantity and date, the more precise the
+          proposal will be.
+        </p>
+        <div class="mt-10">
+          <ContactForm />
+        </div>
+      </div>
+
+      <aside class="space-y-12" data-reveal data-reveal-delay="100">
+        <div>
+          <h2 class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+            Direct
+          </h2>
+          <ul class="mt-5 space-y-3 font-sans text-body">
+            <li>
+              <a
+                href={`mailto:${email}`}
+                class="underline underline-offset-4 transition-colors hover:text-accent">{email}</a
+              >
+            </li>
+            <li class="text-muted-foreground">Isha Henry-Hament · Calligrapher</li>
+            <li class="text-muted-foreground">Breda, the Netherlands</li>
+            <li>
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline underline-offset-4 transition-colors hover:text-accent"
+                >@henrycalligraphy</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+            What to expect
+          </h2>
+          <ol class="mt-5 space-y-6">
+            {
+              expectations.map((item) => (
+                <li>
+                  <h3 class="font-serif text-lg leading-snug">{item.title}</h3>
+                  <p class="mt-2 font-sans text-body text-muted-foreground">{item.text}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </Section>
+</LayoutV2>

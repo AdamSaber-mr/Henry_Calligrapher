@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+import { tagline } from '../../data/content';
+import { img } from '../../lib/images';
+
+const hero = img('calligraphy-menu.jpg');
+---
+
+{/*
+  One image, two roles. Below lg it is absolutely positioned behind the copy with a cream
+  scrim over it, which keeps the hero short on a phone. From lg it drops back into the grid
+  as the right-hand column. Using a single element avoids downloading the photo twice.
+*/}
+<section class="relative overflow-hidden">
+  <div
+    class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-section sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-20"
+  >
+    <div class="relative z-10" data-reveal>
+      <p
+        class="flex items-center gap-3 font-sans text-eyebrow uppercase tracking-[0.24em] text-foreground/75 lg:text-muted-foreground"
+      >
+        <span class="h-px w-8 shrink-0 bg-accent" aria-hidden="true"></span>
+        Bespoke copperplate calligraphy · Breda
+      </p>
+
+      <h1 class="mt-6 max-w-2xl text-balance font-serif text-display">
+        {tagline}
+      </h1>
+
+      <p class="mt-6 max-w-lg font-sans text-lead text-foreground/80 lg:text-muted-foreground">
+        Calligraphy, engraving and hot foil — three crafts, one goal: turning your message into a
+        lasting, handcrafted detail.
+      </p>
+
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <Button href="/v2/petalia" variant="accent">Discover Pétalia</Button>
+        <Button href="/v2/contact" variant="outline">Commission inquiry</Button>
+      </div>
+    </div>
+
+    <div
+      class="absolute inset-0 z-0 lg:relative lg:inset-auto lg:z-auto"
+      data-reveal
+      data-reveal-delay="120"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 hidden translate-x-4 translate-y-4 rounded-2xl border border-accent/30 lg:block lg:translate-x-5 lg:translate-y-5"
+        aria-hidden="true"
+      >
+      </div>
+      <Image
+        src={hero}
+        alt="Handwritten copperplate calligraphy menu card on a dinner plate"
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 1024px) 32rem, 100vw"
+        class="relative h-full w-full object-cover object-[50%_55%] lg:aspect-[4/5] lg:h-auto lg:rounded-2xl lg:shadow-soft"
+        loading="eager"
+        fetchpriority="high"
+      />
+      {/* Cream wash so the dark copy stays readable over the photograph on small screens. */}
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-background/90 via-background/87 to-background/80 lg:hidden"
+        aria-hidden="true"
+      >
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { mailto, serviceSections } from '../data/content';
+
+const serviceMailto = mailto.service;
+
+const services = serviceSections.map((section) => ({
+  ...section,
+  image: `/images/${section.file}`,
+}));
+---
+
+<Layout
+  title="Services — Henry Calligraphy"
+  description="Bespoke calligraphy, engraving and hot foil services by Henry Calligraphy. Handcrafted details that elevate weddings, events and brands."
+>
+  <section class="border-b border-foreground/15">
+    <div class="mx-auto max-w-6xl px-6 py-24 text-center">
+      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
+        Bespoke craftsmanship
+      </p>
+      <h1 class="mt-5 font-serif text-4xl leading-tight md:text-6xl">Services</h1>
+      <p class="mx-auto mt-6 max-w-2xl font-sans text-sm leading-relaxed text-muted-foreground">
+        Calligraphy, engraving and hot foil — three crafts, one goal: turning your message into a
+        lasting, handcrafted detail.
+      </p>
+    </div>
+  </section>
+
+  {
+    services.map((service) => (
+      <section class="border-b border-foreground/15">
+        <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
+          <img
+            src={service.image}
+            alt={service.alt}
+            class={`aspect-[3/4] w-full object-cover object-center sm:aspect-auto sm:h-96 md:h-[28rem] ${
+              service.reversed ? 'order-1 md:order-2' : ''
+            }`}
+          />
+          <div class={service.reversed ? 'order-2 md:order-1' : ''}>
+            <h2 class="font-serif text-3xl leading-tight md:text-4xl">{service.title}</h2>
+            <ul class="mt-6 space-y-3 font-sans text-sm leading-relaxed text-muted-foreground">
+              {service.items.map((item) => (
+                <li class="flex gap-3">
+                  <span aria-hidden="true" class="mt-2.5 h-px w-4 shrink-0 bg-accent" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={serviceMailto}
+              class="mt-8 inline-flex items-center border border-foreground px-8 py-3 font-sans text-[0.65rem] uppercase tracking-[0.3em] transition-colors hover:bg-foreground hover:text-background"
+            >
+              Inquire about {service.title}
+            </a>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</Layout>

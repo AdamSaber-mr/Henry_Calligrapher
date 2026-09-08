@@ -1,0 +1,83 @@
+---
+/**
+ * Collapses a long passage on small screens only.
+ *
+ * Progressive enhancement: the collapse is applied by CSS that is scoped to `html.js`, so
+ * without JavaScript the full text renders and the button never appears. If the passage turns
+ * out to be shorter than the collapsed height, the script marks it so no useless button shows.
+ */
+interface Props {
+  /** Collapsed height on mobile. */
+  maxHeight?: string;
+  label?: string;
+  lessLabel?: string;
+  class?: string;
+}
+
+const {
+  maxHeight = '15rem',
+  label = 'Read more',
+  lessLabel = 'Read less',
+  class: className = '',
+} = Astro.props;
+---
+
+<div class={`readmore ${className}`} data-readmore>
+  <div class="readmore-content" style={`--readmore-max: ${maxHeight}`}>
+    <slot />
+  </div>
+
+  <button
+    type="button"
+    class="readmore-toggle mt-4 inline-flex items-center gap-2 font-sans text-eyebrow uppercase tracking-[0.2em] text-accent transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    aria-expanded="false"
+  >
+    <span data-readmore-label>{label}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="readmore-chevron h-4 w-4"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
+</div>
+
+<script is:inline define:vars={{ label, lessLabel }}>
+  // Inline so the labels stay with each instance; the work is trivial either way.
+  for (const block of document.querySelectorAll('[data-readmore]')) {
+    if (block.dataset.readmoreReady) continue;
+    block.dataset.readmoreReady = 'true';
+
+    const content = block.querySelector('.readmore-content');
+    const button = block.querySelector('.readmore-toggle');
+    const text = block.querySelector('[data-readmore-label]');
+    if (!content || !button || !text) continue;
+
+    /* Hide the button when the passage already fits, so it never does nothing. */
+    const measure = () => {
+      if (block.hasAttribute('data-expanded')) return;
+      const fits = content.scrollHeight <= content.clientHeight + 4;
+      block.toggleAttribute('data-fits', fits);
+    };
+
+    button.addEventListener('click', () => {
+      const expanded = block.toggleAttribute('data-expanded');
+      button.setAttribute('aria-expanded', String(expanded));
+      text.textContent = expanded ? lessLabel : label;
+      if (!expanded) {
+        block.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        window.setTimeout(measure, 300);
+      }
+    });
+
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+  }
+</script>

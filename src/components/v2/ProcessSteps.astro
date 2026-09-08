@@ -1,0 +1,29 @@
+---
+import Section from './Section.astro';
+import { process } from '../../data/content';
+---
+
+<Section>
+  <div class="max-w-2xl" data-reveal>
+    <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+      How it works
+    </p>
+    <h2 class="mt-4 font-serif text-headline">From first note to finished piece</h2>
+    <p class="mt-5 font-sans text-lead text-muted-foreground">
+      Every commission is quoted individually. Here is what happens between your first message and
+      the piece arriving at your door.
+    </p>
+  </div>
+
+  <ol class="mt-12 grid gap-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-8">
+    {
+      process.map((item, i) => (
+        <li data-reveal data-reveal-delay={i * 90}>
+          <span class="font-serif text-4xl leading-none text-accent/35">{item.step}</span>
+          <h3 class="mt-4 font-serif text-title">{item.title}</h3>
+          <p class="mt-3 font-sans text-body text-muted-foreground">{item.text}</p>
+        </li>
+      ))
+    }
+  </ol>
+</Section>

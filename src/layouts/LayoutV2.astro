@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+import HeaderV2 from '../components/v2/Header.astro';
+import FooterV2 from '../components/v2/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import VersionSwitch from '../components/VersionSwitch.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en" data-version="v2">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Isha Henry-Hament" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+
+    {/* The redesign lives alongside the replica; keep it out of search results so the
+        two versions do not compete for the same queries. */}
+    <meta name="robots" content="noindex, follow" />
+
+    <meta property="og:site_name" content="Henry Calligraphy" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Karla:wght@300;400;500;600&display=swap"
+    />
+
+    {/* Set before first paint so reveal-on-scroll never flashes unstyled content. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class="text-foreground">
+    <a
+      href="#main"
+      class="sr-only rounded-full focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-foreground focus:px-5 focus:py-3 focus:font-sans focus:text-sm focus:text-background"
+      >Skip to content</a
+    >
+
+    <div class="flex min-h-screen flex-col">
+      <HeaderV2 />
+      <main id="main" class="flex-1">
+        <slot />
+      </main>
+      <FooterV2 />
+    </div>
+
+    <CookieBanner />
+    <VersionSwitch />
+
+    <script>
+      const reveal = () => {
+        const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        if (!items.length) return;
+
+        if (!('IntersectionObserver' in window)) {
+          for (const el of items) el.classList.add('is-visible');
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const el = entry.target as HTMLElement;
+              const delay = Number(el.dataset.revealDelay ?? 0);
+              window.setTimeout(() => el.classList.add('is-visible'), delay);
+              observer.unobserve(el);
+            }
+          },
+          { rootMargin: '0px 0px -80px 0px', threshold: 0.05 }
+        );
+
+        for (const el of items) observer.observe(el);
+
+        // Failsafe: never leave content invisible if the observer misses an element.
+        window.setTimeout(() => {
+          for (const el of items) el.classList.add('is-visible');
+        }, 5000);
+      };
+
+      reveal();
+    </script>
+  </body>
+</html>

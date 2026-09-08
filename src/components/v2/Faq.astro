@@ -1,0 +1,56 @@
+---
+import Section from './Section.astro';
+import Button from './Button.astro';
+import { faq } from '../../data/content';
+---
+
+<Section id="faq">
+  <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start" data-reveal>
+      <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+        Good to know
+      </p>
+      <h2 class="mt-4 font-serif text-headline">Frequently asked</h2>
+      <p class="mt-5 max-w-sm font-sans text-lead text-muted-foreground">
+        The practical side of a bespoke commission — quotes, payment, turnaround and what happens if
+        plans change.
+      </p>
+
+      <div class="mt-9 rounded-2xl border border-foreground/15 bg-card p-6">
+        <h3 class="font-serif text-lg">Still have questions?</h3>
+        <p class="mt-2 font-sans text-body text-muted-foreground">
+          Ask directly and you'll get a straight answer.
+        </p>
+        <div class="mt-5">
+          <Button href="/v2/contact" variant="outline">Get in touch</Button>
+        </div>
+      </div>
+    </div>
+
+    <div class="divide-y divide-foreground/10 border-y border-foreground/10">
+      {
+        faq.map((item) => (
+          <details class="group" data-reveal>
+            <summary class="flex min-h-[3.5rem] cursor-pointer list-none items-center justify-between gap-6 py-5 font-serif text-title transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden">
+              <span>{item.q}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                class="h-5 w-5 shrink-0 text-accent transition-transform duration-300 group-open:rotate-45"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+            </summary>
+            <p class="pb-6 font-sans text-body text-muted-foreground">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</Section>
