@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+import { email, instagramUrl, navLinks, tagline } from '../../data/content';
+import { img } from '../../lib/images';
+
+const wordmark = img('henry-wordmark-alpha.png');
+const v2Href: Record<string, string> = { '/#inquiry': '/v2/contact' };
+const toV2 = (href: string) => v2Href[href] ?? `/v2${href}`;
+
+const explore = [
+  ...navLinks.map((l) => ({ href: toV2(l.href), label: l.label })),
+  { href: '/v2/petalia', label: 'Pétalia Collection' },
+];
+
+const linkClass = 'transition-colors hover:text-accent';
+const headingClass = 'font-sans text-eyebrow uppercase tracking-[0.22em] text-muted-foreground';
+const year = new Date().getFullYear();
+---
+
+{/* Two columns from the smallest screen up, so the footer stays a short block on a phone
+    instead of four stacked lists. */}
+<footer class="mt-auto border-t border-foreground/10">
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16 lg:py-section">
+    <div class="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-12">
+      <div class="col-span-2 lg:col-span-1">
+        <Image
+          src={wordmark}
+          alt="Henry Calligraphy"
+          widths={[280, 560]}
+          sizes="200px"
+          class="h-10 w-auto sm:h-12 lg:h-14"
+          loading="lazy"
+        />
+        <p
+          class="mt-4 max-w-sm font-serif text-base italic leading-snug text-foreground/75 sm:text-lg lg:mt-6 lg:text-xl"
+        >
+          {tagline}
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class={headingClass}>Explore</h2>
+        <ul class="mt-4 space-y-2.5 font-sans text-sm sm:text-body lg:mt-5">
+          {
+            explore.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* min-w-0 lets the column shrink; without it the long email address sets a minimum
+          width and pushes past the container padding on a phone. */}
+      <div class="min-w-0">
+        <h2 class={headingClass}>Contact</h2>
+        <ul class="mt-4 space-y-2.5 break-words font-sans text-sm sm:text-body lg:mt-5">
+          <li><a href={`mailto:${email}`} class={linkClass}>{email}</a></li>
+          <li class="text-muted-foreground">Isha Henry-Hament</li>
+          <li class="text-muted-foreground">Breda, the Netherlands</li>
+          <li>
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class={linkClass}>
+              @henrycalligraphy
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-10 flex flex-col gap-3 border-t border-foreground/10 pt-6 font-sans text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:gap-4 lg:mt-14 lg:pt-8"
+    >
+      <p>© {year} Henry Calligraphy</p>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <a href="/v2/cookie-policy" class={linkClass}>Cookie Policy</a>
+        <a href="/v2/terms-and-conditions" class={linkClass}>Terms and Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>

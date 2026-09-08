@@ -1,0 +1,31 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  center?: boolean;
+}
+
+const { eyebrow, title, lead, center = false } = Astro.props;
+---
+
+<section class="border-b border-foreground/10">
+  <div
+    class={`mx-auto max-w-6xl px-5 pb-14 pt-section sm:px-6 ${center ? 'text-center' : ''}`}
+    data-reveal
+  >
+    <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+      {eyebrow}
+    </p>
+    <h1 class="mt-4 font-serif text-display">{title}</h1>
+    {
+      lead && (
+        <p
+          class={`mt-6 max-w-2xl font-sans text-lead text-muted-foreground ${center ? 'mx-auto' : ''}`}
+        >
+          {lead}
+        </p>
+      )
+    }
+  </div>
+</section>

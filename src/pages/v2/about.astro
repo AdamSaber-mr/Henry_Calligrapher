@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import LayoutV2 from '../../layouts/LayoutV2.astro';
+import Section from '../../components/v2/Section.astro';
+import ContactBanner from '../../components/v2/ContactBanner.astro';
+import InstagramGrid from '../../components/v2/InstagramGrid.astro';
+import ReadMore from '../../components/v2/ReadMore.astro';
+import Button from '../../components/v2/Button.astro';
+import { img } from '../../lib/images';
+
+const portrait = img('2026_Brandshoot-Isha-34.jpg');
+
+/* Her biography, in the original order. The pull quote is the second half of the fourth
+   paragraph, lifted out rather than duplicated, so the full text appears exactly once. */
+const before = [
+  'I’m 32 years old and a professional calligrapher based in Breda, the Netherlands. The name "Henry Calligraphy" is inspired by our little family name.',
+  'I’m a mother of two and a former politician who is combining her corporate job with her passion for lettering. I hold a Bachelor’s degree in Business and Languages, as well as a Master’s in International Relations and Diplomacy.',
+  'I previously served as a city council member and bring over 10 years of experience in sales and business development, having lived and worked in Hong Kong, Paris, Spain, and The Netherlands.',
+  'With a Tanzanian and Dutch background, I identify as multicultural—shaped by different places, perspectives, and experiences.',
+];
+
+const quote =
+  'The consistent thread throughout my life? The belief that words matter; your message matters, and how you convey it matters just as much.';
+
+const after = [
+  'As AI and digitalisation continue to reshape our world, there is a growing appreciation for the authenticity of craftsmanship.',
+  'I practice copperplate calligraphy and I am passionate about sharing the beauty of bespoke calligraphy with the world. A true luxury!',
+];
+---
+
+<LayoutV2
+  title="About — Henry Calligraphy"
+  description="Meet Isha Henry-Hament, professional copperplate calligrapher based in Breda, the Netherlands."
+>
+  <Section divider={false}>
+    {/* `contents` flattens the left column into the grid on mobile so the button can be
+        ordered after the text, while on desktop it is a real column again and sits under
+        the portrait — which keeps the two columns closer in height. */}
+    <div class="grid gap-10 lg:grid-cols-[0.82fr_1fr] lg:items-start lg:gap-20">
+      <div class="contents lg:block">
+        <div class="order-1 overflow-hidden rounded-2xl" data-reveal>
+          {/* 2:3 is the photograph's own ratio, so nothing is cropped away. */}
+          <Image
+            src={portrait}
+            alt="Isha Henry-Hament, calligrapher and founder of Henry Calligraphy"
+            widths={[480, 720, 1000]}
+            sizes="(min-width: 1024px) 29rem, 92vw"
+            class="aspect-[2/3] w-full object-cover"
+            loading="eager"
+          />
+        </div>
+        <div class="order-3 mt-8" data-reveal>
+          <Button href="/v2/contact" variant="accent">Work with me</Button>
+        </div>
+      </div>
+
+      <div class="order-2 lg:order-none" data-reveal data-reveal-delay="100">
+        <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+          About me
+        </p>
+        <h1 class="mt-3 text-balance font-serif text-display">My name is Isha Henry-Hament.</h1>
+
+        <ReadMore class="mt-7" maxHeight="17rem">
+          <div class="space-y-4 font-sans text-body text-muted-foreground">
+            {before.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+
+          <blockquote class="my-7 border-l-2 border-accent pl-6">
+            <p class="font-serif text-title italic leading-snug text-foreground lg:text-[1.5rem]">
+              {quote}
+            </p>
+          </blockquote>
+
+          <div class="space-y-4 font-sans text-body text-muted-foreground">
+            {after.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </ReadMore>
+      </div>
+    </div>
+  </Section>
+
+  <InstagramGrid />
+  <ContactBanner />
+</LayoutV2>

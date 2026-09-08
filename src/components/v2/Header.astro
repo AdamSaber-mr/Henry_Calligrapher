@@ -1,0 +1,253 @@
+---
+import { Image } from 'astro:assets';
+import { navLinks } from '../../data/content';
+import { img } from '../../lib/images';
+
+/* The source wordmark is RGB without an alpha channel, so its white background shows through
+   the header's backdrop-blur. This variant has real transparency — see the plan for how it
+   was generated. v1 keeps using the untouched original. */
+const wordmark = img('henry-wordmark-alpha.png');
+
+/** v1 hrefs live at the site root; the redesign is namespaced under /v2. */
+const v2Href: Record<string, string> = { '/#inquiry': '/v2/contact' };
+const toV2 = (href: string) => v2Href[href] ?? `/v2${href}`;
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const links = navLinks.map((link) => {
+  const href = toV2(link.href);
+  return { href, label: link.label, active: path === href };
+});
+const petaliaActive = path === '/v2/petalia';
+
+const deskLink =
+  'font-sans text-[0.78rem] uppercase tracking-[0.2em] transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background';
+const pill =
+  'inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 font-sans text-[0.7rem] uppercase tracking-[0.18em] text-accent-foreground transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-foreground/10 bg-background/85 backdrop-blur-md transition-shadow duration-300 data-[scrolled]:shadow-soft"
+>
+  <div
+    class="group mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-2.5 transition-[padding] duration-300 sm:px-6 sm:py-3 lg:py-3.5 lg:data-[scrolled]:py-2.5"
+    id="header-inner"
+  >
+    <a
+      href="/v2"
+      class="shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+      aria-label="Henry Calligraphy — home"
+    >
+      <Image
+        src={wordmark}
+        alt="Henry Calligraphy"
+        widths={[280, 560]}
+        sizes="220px"
+        class="h-11 w-auto transition-[height] duration-300 group-data-[scrolled]:h-10 sm:h-12 sm:group-data-[scrolled]:h-11 lg:h-16 lg:group-data-[scrolled]:h-14"
+        loading="eager"
+      />
+    </a>
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-8">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class={`${deskLink} ${link.active ? 'text-accent' : 'text-muted-foreground'}`}
+                aria-current={link.active ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="/v2/petalia" class={pill} aria-current={petaliaActive ? 'page' : undefined}>
+            Pétalia Collection
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      id="menu-open"
+      class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        class="h-6 w-6"
+        aria-hidden="true"
+      >
+        <path d="M3 6h18"></path>
+        <path d="M3 12h18"></path>
+        <path d="M3 18h18"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  hidden
+  class="fixed inset-0 z-[60] lg:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+>
+  <div id="menu-backdrop" class="absolute inset-0 bg-foreground/30 backdrop-blur-sm"></div>
+  <div
+    id="menu-panel"
+    class="absolute inset-y-0 right-0 flex w-full max-w-sm translate-x-full flex-col bg-background shadow-lift transition-transform duration-300 ease-out"
+  >
+    <div class="flex items-center justify-between border-b border-foreground/10 px-5 py-4">
+      <span class="font-serif text-sm uppercase tracking-[0.25em]">Menu</span>
+      <button
+        type="button"
+        id="menu-close"
+        class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label="Close menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          class="h-6 w-6"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav aria-label="Mobile" class="flex-1 overflow-y-auto px-5 py-6">
+      <ul class="flex flex-col">
+        {
+          links.map((link) => (
+            <li class="border-b border-foreground/10">
+              <a
+                href={link.href}
+                class={`flex min-h-[3.25rem] items-center font-serif text-2xl transition-colors hover:text-accent ${
+                  link.active ? 'text-accent' : ''
+                }`}
+                aria-current={link.active ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/v2/petalia" class={`${pill} mt-8 w-full`}>Pétalia Collection</a>
+    </nav>
+
+    <div class="border-t border-foreground/10 px-5 py-5 font-sans text-sm text-muted-foreground">
+      <a href="mailto:info@henrycalligraphy.com" class="transition-colors hover:text-accent"
+        >info@henrycalligraphy.com</a
+      >
+    </div>
+  </div>
+</div>
+
+<script>
+  const header = document.getElementById('site-header');
+  const inner = document.getElementById('header-inner');
+  const menu = document.getElementById('mobile-menu');
+  const panel = document.getElementById('menu-panel');
+  const openBtn = document.getElementById('menu-open');
+  const closeBtn = document.getElementById('menu-close');
+  const backdrop = document.getElementById('menu-backdrop');
+
+  /* Compact the header once the page has scrolled past the hero edge. */
+  if (header && inner) {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 24;
+      for (const el of [header, inner]) {
+        if (scrolled) el.setAttribute('data-scrolled', '');
+        else el.removeAttribute('data-scrolled');
+      }
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (menu && panel && openBtn && closeBtn && backdrop) {
+    const FOCUSABLE = 'a[href], button:not([disabled])';
+    let lastFocused: HTMLElement | null = null;
+
+    const open = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      menu.hidden = false;
+      document.body.style.overflow = 'hidden';
+      openBtn.setAttribute('aria-expanded', 'true');
+      // Next frame, so the transform transition actually runs.
+      requestAnimationFrame(() => panel.classList.remove('translate-x-full'));
+      closeBtn.focus();
+    };
+
+    const close = () => {
+      panel.classList.add('translate-x-full');
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      window.setTimeout(() => {
+        menu.hidden = true;
+        lastFocused?.focus();
+      }, 300);
+    };
+
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+
+    for (const link of panel.querySelectorAll('a[href]')) {
+      link.addEventListener('click', close);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (menu.hidden) return;
+
+      if (event.key === 'Escape') {
+        close();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      // Focus trap: keep Tab inside the panel while it is open.
+      const items = [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (el) => el.offsetParent !== null
+      );
+      if (!items.length) return;
+
+      const first = items[0];
+      const last = items[items.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Leaving the mobile breakpoint while the drawer is open would strand the scroll lock.
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+      if (event.matches && !menu.hidden) close();
+    });
+  }
+</script>

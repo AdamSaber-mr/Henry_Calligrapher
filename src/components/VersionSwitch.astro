@@ -1,0 +1,40 @@
+---
+/**
+ * Demo control: jumps between the 1:1 replica (v1, at `/`) and the redesign (v2, at `/v2`),
+ * keeping the current page. Rendered outside <main>, <header> and <footer> so it never
+ * interferes with the fase 1 markup comparison against the original site.
+ */
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isV2 = path === '/v2' || path.startsWith('/v2/');
+
+const target = isV2 ? path.replace(/^\/v2/, '') || '/' : path === '/' ? '/v2' : `/v2${path}`;
+const label = isV2 ? 'Original version' : 'New version';
+const title = isV2
+  ? 'Switch to the 1:1 replica of the original site'
+  : 'Switch to the redesigned version';
+---
+
+<a
+  href={target}
+  title={title}
+  data-version-switch
+  class="fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-background/95 px-4 py-2.5 font-sans text-xs tracking-wide text-foreground shadow-soft backdrop-blur transition-colors hover:border-accent/40 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="h-4 w-4 shrink-0"
+    aria-hidden="true"
+  >
+    <path d="M8 3 4 7l4 4"></path>
+    <path d="M4 7h16"></path>
+    <path d="m16 21 4-4-4-4"></path>
+    <path d="M20 17H4"></path>
+  </svg>
+  <span>{label}</span>
+</a>

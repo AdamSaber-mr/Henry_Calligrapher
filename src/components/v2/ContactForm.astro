@@ -1,0 +1,114 @@
+---
+import { contactSubjects, mailto } from '../../data/content';
+
+const field =
+  'w-full rounded-xl border border-foreground/20 bg-background px-4 py-3 font-sans text-body text-foreground transition-colors placeholder:text-muted-foreground/70 focus:border-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring/30';
+const label = 'block font-sans text-eyebrow uppercase tracking-[0.2em] text-muted-foreground';
+---
+
+<form id="contact-form" class="grid gap-5 sm:grid-cols-2">
+  <div class="sm:col-span-2">
+    <label class={label} for="f-subject">What is it about?</label>
+    <select id="f-subject" name="subject" class={`mt-2 ${field}`}>
+      <option value="">Something else</option>
+      {
+        contactSubjects.map((subject) => (
+          <option value={subject.value}>{subject.label}</option>
+        ))
+      }
+    </select>
+  </div>
+
+  <div>
+    <label class={label} for="f-name">Name</label>
+    <input id="f-name" name="name" type="text" required class={`mt-2 ${field}`} />
+  </div>
+  <div>
+    <label class={label} for="f-email">Email</label>
+    <input id="f-email" name="email" type="email" required class={`mt-2 ${field}`} />
+  </div>
+
+  <div>
+    <label class={label} for="f-occasion">Occasion</label>
+    <input
+      id="f-occasion"
+      name="occasion"
+      type="text"
+      placeholder="Wedding, brand activation…"
+      class={`mt-2 ${field}`}
+    />
+  </div>
+  {/* The native date control needs more room than a plain text field. */}
+  <div class="grid grid-cols-[1.25fr_1fr] gap-5">
+    <div class="min-w-0">
+      <label class={label} for="f-date">Date</label>
+      <input id="f-date" name="date" type="date" class={`mt-2 ${field}`} />
+    </div>
+    <div class="min-w-0">
+      <label class={label} for="f-quantity">Quantity</label>
+      <input id="f-quantity" name="quantity" type="text" class={`mt-2 ${field}`} />
+    </div>
+  </div>
+
+  <div class="sm:col-span-2">
+    <label class={label} for="f-message">Message</label>
+    <textarea id="f-message" name="message" rows="5" required class={`mt-2 ${field}`}></textarea>
+  </div>
+
+  <div class="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center">
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center rounded-full bg-foreground px-7 py-3.5 font-sans text-[0.75rem] uppercase tracking-[0.18em] text-background transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      Send inquiry
+    </button>
+    <p class="font-sans text-sm leading-relaxed text-muted-foreground">
+      Opens your email app with the message ready to send.
+    </p>
+  </div>
+</form>
+
+<script define:vars={{ fallback: mailto.commission }}>
+  const form = document.getElementById('contact-form');
+  const subject = document.getElementById('f-subject');
+
+  /* The subject cards above link here with ?subject=service|product|petalia. */
+  if (subject) {
+    const wanted = new URLSearchParams(window.location.search).get('subject');
+    if (wanted && [...subject.options].some((o) => o.value === wanted)) {
+      subject.value = wanted;
+    }
+  }
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const data = new FormData(form);
+    const get = (key) => String(data.get(key) ?? '').trim();
+
+    const chosen = subject?.selectedOptions[0]?.textContent?.trim() ?? '';
+    const lines = [
+      'Hello Isha,',
+      '',
+      `I would like to inquire about: ${chosen}`,
+      '',
+      `Occasion: ${get('occasion')}`,
+      `Date: ${get('date')}`,
+      `Quantity: ${get('quantity')}`,
+      '',
+      get('message'),
+      '',
+      'Kind regards,',
+      get('name'),
+      get('email'),
+    ];
+
+    const href =
+      'mailto:info@henrycalligraphy.com' +
+      `?subject=${encodeURIComponent(`Commission inquiry — ${chosen || 'general'}`)}` +
+      `&body=${encodeURIComponent(lines.join('\n'))}`;
+
+    // mailto length limits vary by client; fall back to the plain template if it gets long.
+    window.location.href = href.length > 1800 ? fallback : href;
+  });
+</script>

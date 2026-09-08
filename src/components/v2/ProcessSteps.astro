@@ -1,0 +1,90 @@
+---
+import Section from './Section.astro';
+import { process } from '../../data/content';
+---
+
+<Section>
+  <div class="max-w-2xl" data-reveal>
+    <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+      How it works
+    </p>
+    <h2 class="mt-4 font-serif text-headline">From first note to finished piece</h2>
+    <p class="mt-5 font-sans text-lead text-muted-foreground">
+      Every commission is quoted individually. Here is what happens between your first message and
+      the piece arriving at your door.
+    </p>
+  </div>
+
+  {/*
+    Four steps side by side from md up; on a phone they collapse into an accordion so the
+    section is a short, scannable list of numbered stages instead of a long scroll.
+
+    The markup ships with `open` so a visitor without JavaScript reads every step; the script
+    only closes them below the md breakpoint.
+  */}
+  <ol class="process mt-10 md:mt-14 md:grid md:grid-cols-4 md:gap-8">
+    {
+      process.map((item, i) => (
+        <li class="process-item border-t border-foreground/10 md:border-0" data-reveal data-reveal-delay={i * 90}>
+          <details class="process-step" open>
+            <summary class="process-summary flex cursor-pointer list-none items-center gap-4 py-4 md:block md:cursor-default md:py-0 [&::-webkit-details-marker]:hidden">
+              <span class="font-serif text-3xl leading-none text-accent/45 md:text-4xl md:text-accent/35">
+                {item.step}
+              </span>
+              <h3 class="flex-1 font-serif text-title md:mt-4">{item.title}</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="process-chevron h-5 w-5 shrink-0 text-accent md:hidden"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <p class="pb-5 font-sans text-body text-muted-foreground md:pb-0 md:mt-3">
+              {item.text}
+            </p>
+          </details>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
+
+<script>
+  /* Collapse the steps on phones only. They are authored open so the content survives
+     without JavaScript; here we close them and keep that in sync with the breakpoint. */
+  const steps = document.querySelectorAll<HTMLDetailsElement>('.process-step');
+
+  if (steps.length) {
+    const wide = window.matchMedia('(min-width: 768px)');
+
+    const sync = () => {
+      for (const step of steps) step.open = wide.matches;
+    };
+
+    sync();
+    wide.addEventListener('change', sync);
+  }
+</script>
+
+<style>
+  .process-chevron {
+    transition: transform 0.25s ease;
+  }
+
+  .process-step[open] .process-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-chevron {
+      transition: none;
+    }
+  }
+</style>

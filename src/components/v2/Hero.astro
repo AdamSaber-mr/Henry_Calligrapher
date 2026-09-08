@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+import { heroLead, heroTitle, tagline } from '../../data/content';
+import { img } from '../../lib/images';
+
+/*
+ * One photograph in two roles. Below lg it is the background behind the copy; from lg it
+ * drops into the grid as the right-hand panel. A single element means one download.
+ *
+ * On mobile the photograph runs at full strength with the copy going light over a dark
+ * scrim — a pale wash would keep the text dark but bleach the picture.
+ */
+const hero = img('petalia-first.jpg');
+---
+
+<section class="relative overflow-hidden">
+  {/* The hero used to end up shorter than the section beneath it on a phone, which made it
+      read as the smaller of the two. A minimum height in svh gives it presence and, with
+      items-center, spreads the copy out instead of stacking it tightly. */}
+  <div
+    class="relative mx-auto grid min-h-[70svh] max-w-6xl items-center gap-12 px-5 py-section sm:px-6 lg:min-h-0 lg:grid-cols-[1.05fr_1fr] lg:gap-20"
+  >
+    <div class="relative z-10" data-reveal>
+      <p
+        class="flex items-center gap-3 font-sans text-eyebrow uppercase tracking-[0.24em] text-background/90 lg:text-muted-foreground"
+      >
+        <span class="h-px w-8 shrink-0 bg-accent" aria-hidden="true"></span>
+        Bespoke copperplate calligraphy · Breda
+      </p>
+
+      {/* Short and punchy on a phone; the full brand line returns on desktop, where there
+          is room for it. Only one of the two is ever rendered. */}
+      <h1
+        class="mt-7 max-w-2xl text-balance font-serif text-display text-background lg:mt-6 lg:text-foreground"
+      >
+        <span class="lg:hidden">{heroTitle}</span>
+        <span class="hidden lg:inline">{tagline}</span>
+      </h1>
+
+      <p
+        class="mt-6 max-w-md font-sans text-lead text-background/85 lg:max-w-lg lg:text-muted-foreground"
+      >
+        <span class="lg:hidden">{heroLead}</span>
+        <span class="hidden lg:inline">
+          Calligraphy, engraving and hot foil — three crafts, one goal: turning your message into a
+          lasting, handcrafted detail.
+        </span>
+      </p>
+
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <Button href="/v2/petalia" variant="accent" size="smMd">Discover Pétalia</Button>
+        <Button href="/v2/contact" variant="heroOutline" size="smMd">Commission inquiry</Button>
+      </div>
+    </div>
+
+    <div
+      class="absolute inset-0 z-0 lg:relative lg:inset-auto lg:z-auto"
+      data-reveal
+      data-reveal-delay="120"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 hidden translate-x-4 translate-y-4 rounded-2xl border border-accent/30 lg:block lg:translate-x-5 lg:translate-y-5"
+        aria-hidden="true"
+      >
+      </div>
+      <Image
+        src={hero}
+        alt="Pétalia botanical Save the Date cards with a fresh rose"
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 1024px) 32rem, 100vw"
+        class="relative h-full w-full object-cover object-[66%_50%] lg:aspect-[4/5] lg:h-auto lg:rounded-2xl lg:object-center lg:shadow-soft"
+        loading="eager"
+        fetchpriority="high"
+      />
+      {/* Dark scrim, mobile only — deepens the photograph instead of bleaching it.
+          68% is the minimum that keeps the smallest text at 4.5:1; measured, not guessed. */}
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-foreground/68 via-foreground/70 to-foreground/78 lg:hidden"
+        aria-hidden="true"
+      >
+      </div>
+    </div>
+  </div>
+</section>

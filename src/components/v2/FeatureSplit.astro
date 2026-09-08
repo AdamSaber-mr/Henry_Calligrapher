@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import { img } from '../../lib/images';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  file: string;
+  alt: string;
+  objectPosition?: string;
+  reversed?: boolean;
+  ratio?: string;
+  /** `base` for longer copy — four paragraphs at lead size reads far too heavy. */
+  bodySize?: 'lead' | 'base';
+}
+
+const {
+  eyebrow,
+  title,
+  file,
+  alt,
+  objectPosition = 'object-center',
+  reversed = false,
+  ratio = 'aspect-[4/3]',
+  bodySize = 'lead',
+} = Astro.props;
+
+const bodyClass = bodySize === 'lead' ? 'text-lead' : 'text-body';
+
+const image = img(file);
+---
+
+<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+  <div class={reversed ? 'lg:order-2' : ''} data-reveal>
+    {
+      eyebrow && (
+        <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+          {eyebrow}
+        </p>
+      )
+    }
+    <h2 class="mt-4 font-serif text-headline">{title}</h2>
+    <div class={`mt-5 max-w-lg font-sans ${bodyClass} text-muted-foreground`}>
+      <slot />
+    </div>
+    <div class="mt-8 empty:mt-0">
+      <slot name="cta" />
+    </div>
+  </div>
+
+  <div class={`overflow-hidden rounded-2xl ${reversed ? 'lg:order-1' : ''}`} data-reveal data-reveal-delay="100">
+    <Image
+      src={image}
+      alt={alt}
+      widths={[560, 840, 1120]}
+      sizes="(min-width: 1024px) 32rem, 92vw"
+      class={`${ratio} w-full object-cover ${objectPosition} transition-transform duration-700 hover:scale-105`}
+      loading="lazy"
+    />
+  </div>
+</div>
