@@ -14,14 +14,6 @@ export const email = 'info@henrycalligraphy.com';
 export const instagramUrl = 'https://www.instagram.com/henrycalligraphy/';
 export const tagline = 'There’s a distinctive warmth, that only handwritten notes seem to deliver.';
 
-/**
- * Short hero copy for v2. Both lines are condensed from wording that already exists on the
- * site — the tagline above and the services intro — so nothing new is claimed.
- * v1 keeps using `tagline` verbatim.
- */
-export const heroTitle = 'The warmth of handwritten notes';
-export const heroLead = 'Calligraphy, engraving and hot foil, handcrafted in Breda.';
-
 export const mailto = {
   commission:
     'mailto:info@henrycalligraphy.com?subject=Commission%20inquiry&body=Hello%20Isha%2C%0A%0AI%20would%20like%20to%20inquire%20about%3A%0A%0AOccasion%3A%0ADate%3A%0AQuantity%3A%0A%0AKind%20regards%2C',
@@ -115,20 +107,45 @@ export const serviceSections = [
 /**
  * Selected commissions. The original site shows these as empty placeholder tiles; v2 pairs each
  * one with an illustrative photograph from the studio's existing library.
- * TODO: replace `file` with real photography of each commission when it becomes available.
+ *
+ * `title`, `tag` and `text` are rendered verbatim by v1 (four times per entry, in
+ * `src/pages/previous-projects.astro`), so the client's copy corrections live in the optional
+ * `titleV2` / `tagV2` / `textV2` overrides instead — same additive pattern as
+ * `serviceSections[].position`. `file`, `credit` and `gallery` are read by v2 only.
  */
-export const projects = [
+type Project = {
+  /** Rendered verbatim by v1 — do not edit these three to change v2 copy. */
+  title: string;
+  tag: string;
+  text: string;
+  /** v2 only, all optional. */
+  file: string;
+  titleV2?: string;
+  tagV2?: string;
+  textV2?: string;
+  alt?: string;
+  credit?: string;
+  /** object-position for the card crop, as on `homeServices`. Defaults to centre. */
+  position?: string;
+  /** Key into `projectGalleries`; a card with one opens a lightbox. */
+  gallery?: string;
+};
+
+export const projects: Project[] = [
   {
     title: 'Wedding stationery suite',
     tag: 'Calligraphy',
     text: 'Copperplate place cards, menus and envelopes for an intimate spring wedding.',
     file: 'calligraphy-menu.jpg',
+    gallery: 'wedding-stationery',
   },
   {
     title: 'Brand activation',
     tag: 'Live calligraphy',
     text: 'On-site personalisation of leather goods for a luxury fragrance launch.',
     file: 'live-waxseal.jpg',
+    textV2: 'On-site personalisation of private gatherings and events.',
+    gallery: 'brand-activation',
   },
   {
     title: 'Engraved keepsakes',
@@ -141,18 +158,29 @@ export const projects = [
     tag: 'Hot foil',
     text: 'Gold-foiled menus and place cards for a seated corporate dinner.',
     file: 'hot-foil-notebook.jpg',
+    // 2:3 portrait in a 4:3 frame, so most of the height is cropped away. Centring lands on
+    // the wood and the chess set; the same shift the home page uses brings the notebook back.
+    position: 'object-[50%_70%]',
+    tagV2: 'Hot foiling',
+    titleV2: 'Hot foiling event details',
+    textV2: 'Bespoke leather gifts',
   },
   {
     title: 'Bespoke vow booklets',
     tag: 'Calligraphy',
     text: 'Hand-lettered vow books and love letters written in classic Copperplate.',
     file: 'studio-orders.jpg',
+    titleV2: 'Birth cards and announcements',
+    textV2: 'Hand-lettered birth announcements and keepsake cards in classic Copperplate.',
   },
   {
     title: 'Private celebration',
     tag: 'Studio order',
     text: 'A complete stationery set designed around pressed florals from the Pétalia Collection.',
-    file: 'petalia-bespoke.jpg',
+    file: 'tefaf-alexander-adler.jpg',
+    textV2: 'Bespoke details for your event.',
+    alt: 'Copperplate place card for Alexander Adler at a TEFAF Maastricht dinner',
+    credit: 'Photos by Maison Rowena. Courtesy of TEFAF.',
   },
 ];
 
@@ -175,6 +203,58 @@ export const gallery = [
  * on the site (the home page sections and the Terms and Conditions page), so
  * the redesign adds structure without inventing claims.
  * -------------------------------------------------------------------------- */
+
+/**
+ * Brands the studio has worked with. Isha supplied these three; the rest follow once the site
+ * is live and she can point each brand at the page before asking permission.
+ * `logo` is a file under `src/assets/images/trusted/`; TEFAF is drawn inline as an SVG so it
+ * stays crisp and inherits the ink colour.
+ */
+export const trustedBy = [
+  // TEFAF ships a clean SVG wordmark; it is inlined in the component so it stays vector-sharp
+  // and picks up the ink colour. The rest are PNGs under `src/assets/images/trusted/`.
+  { name: 'TEFAF', href: 'https://www.tefaf.com/', height: 'h-4 sm:h-5' },
+  {
+    name: 'House of Flux',
+    href: 'https://houseofflux.com/',
+    logo: 'trusted/house-of-flux.png',
+    height: 'h-12 sm:h-14',
+  },
+  {
+    name: 'Dévents Event Agency',
+    href: 'https://www.devents-agency.com',
+    logo: 'trusted/devents.png',
+    height: 'h-9 sm:h-10',
+  },
+  {
+    name: 'The Perfect',
+    href: 'https://the-perfect.nl/',
+    logo: 'trusted/the-perfect.png',
+    height: 'h-8 sm:h-9',
+  },
+];
+
+/**
+ * Photo sets behind the project cards on `/v2/previous-projects`. Keyed by the `gallery` field
+ * on a `projects` entry; a card without one stays a plain, non-clickable tile.
+ */
+type GalleryPhoto = { file: string; alt: string; credit?: string };
+
+export const projectGalleries: Record<string, GalleryPhoto[]> = {
+  'wedding-stationery': [
+    { file: 'wedding-table-menu.jpg', alt: 'Garden table set with a calligraphed menu and candles' },
+    { file: 'wedding-oyster-placecard.jpg', alt: 'Gilded oyster shell place card resting on a handwritten menu' },
+    { file: 'wedding-long-table.jpg', alt: 'Long candlelit wedding table laid with place cards' },
+  ],
+  'brand-activation': [
+    { file: 'activation-mandarin-oriental.jpg', alt: 'Calligraphed welcome card for a Mandarin Oriental spa guest' },
+    { file: 'activation-welcome-cards.jpg', alt: 'Fan of handwritten welcome cards beside a Henry Calligraphy folder' },
+    { file: 'activation-boutique.jpg', alt: 'Guest leaving a boutique event with a personalised gift bag' },
+    { file: 'activation-place-setting.jpg', alt: 'Place card being set at a private dinner table' },
+    { file: 'activation-jansz-eva.jpg', alt: 'Handwritten place card and menu beside peonies' },
+    { file: 'activation-wax-seal.jpg', alt: 'Guest holding a monogrammed envelope closed with a wax seal' },
+  ],
+};
 
 /** Replaces the original's four empty "Client name" placeholders. */
 export const credentials = [
@@ -203,8 +283,8 @@ export const process = [
   },
   {
     step: '04',
-    title: 'Delivered',
-    text: 'Crafted at the pace good work requires. Delivery costs and methods are agreed before final payment.',
+    title: 'Delivered or Orchestration Service',
+    text: 'Delivered by shipping/mail or delivered in person with our Orchestration Service: instead of simply delivering it, we will personally bring the pieces and help you orchestrate and place them.',
   },
 ];
 

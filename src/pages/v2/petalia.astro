@@ -1,10 +1,14 @@
 ---
+import { Image } from 'astro:assets';
 import LayoutV2 from '../../layouts/LayoutV2.astro';
 import PageHeader from '../../components/v2/PageHeader.astro';
 import Section from '../../components/v2/Section.astro';
 import FeatureSplit from '../../components/v2/FeatureSplit.astro';
 import Gallery from '../../components/v2/Gallery.astro';
 import ReadMore from '../../components/v2/ReadMore.astro';
+import { img } from '../../lib/images';
+
+const hero = img('petalia-hero.jpg');
 ---
 
 <LayoutV2
@@ -16,7 +20,23 @@ import ReadMore from '../../components/v2/ReadMore.astro';
     title="Pétalia Collection"
     lead="Where flowers and calligraphy become one."
     center
+    divider={false}
   />
+
+  {/* Portrait source in a landscape band, so the crop is weighted towards the cards on the
+      wall rather than centring on the figure. The bottom padding keeps the photograph off the
+      next section's rule, which it would otherwise sit flush against. */}
+  <div class="mx-auto max-w-6xl px-5 pb-12 sm:px-6 sm:pb-16" data-reveal>
+    <Image
+      src={hero}
+      alt="Isha arranging Pétalia pressed-flower cards on a panelled wall"
+      widths={[640, 960, 1440, 1920]}
+      sizes="(min-width: 1152px) 72rem, 100vw"
+      class="aspect-[4/5] w-full rounded-2xl object-cover object-[42%_28%] sm:aspect-[3/2] lg:aspect-[2/1]"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
 
   <Section>
     <FeatureSplit
@@ -51,7 +71,12 @@ import ReadMore from '../../components/v2/ReadMore.astro';
   </Section>
 
   {/* Both blocks are built identically — same ratio, same body size, no inline button —
-      so neither reads as more important than the other. */}
+      so neither reads as more important than the other.
+
+      Both photographs were re-cut from the full-resolution brandshoot frames so they show
+      more of the scene than the earlier tight crops did — the cards now sit whole on the wood
+      instead of running out of frame. The files are exactly 3:2, so object-cover has nothing
+      left to trim and no objectPosition is needed. */}
   <Section>
     <div class="flex flex-col gap-14 lg:gap-20">
       <FeatureSplit
@@ -59,7 +84,6 @@ import ReadMore from '../../components/v2/ReadMore.astro';
         title="Bespoke Pétalia designs"
         file="petalia-bespoke.jpg"
         alt="Bespoke Pétalia invitation cards with pressed pink carnations and copperplate calligraphy"
-        objectPosition="object-[35%_45%]"
         ratio="aspect-[3/2]"
         bodySize="base"
       >
@@ -83,7 +107,6 @@ import ReadMore from '../../components/v2/ReadMore.astro';
         title="A lasting keepsake"
         file="petalia-keepsake.jpg"
         alt="Finished Pétalia botanical cards with copperplate calligraphy"
-        objectPosition="object-[45%_35%]"
         ratio="aspect-[3/2]"
         bodySize="base"
         reversed

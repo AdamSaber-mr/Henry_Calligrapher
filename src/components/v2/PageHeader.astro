@@ -4,12 +4,14 @@ interface Props {
   title: string;
   lead?: string;
   center?: boolean;
+  /** Turn the bottom rule off when the block below opens with an image of its own. */
+  divider?: boolean;
 }
 
-const { eyebrow, title, lead, center = false } = Astro.props;
+const { eyebrow, title, lead, center = false, divider = true } = Astro.props;
 ---
 
-<section class="border-b border-foreground/10">
+<section class:list={[divider && 'border-b border-foreground/10']}>
   <div
     class={`mx-auto max-w-6xl px-5 pb-14 pt-section sm:px-6 ${center ? 'text-center' : ''}`}
     data-reveal

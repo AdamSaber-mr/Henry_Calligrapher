@@ -3,10 +3,44 @@ import { Image } from 'astro:assets';
 import LayoutV2 from '../../layouts/LayoutV2.astro';
 import PageHeader from '../../components/v2/PageHeader.astro';
 import Button from '../../components/v2/Button.astro';
-import { projects } from '../../data/content';
+import Lightbox from '../../components/v2/Lightbox.astro';
+import { projectGalleries, projects } from '../../data/content';
 import { img } from '../../lib/images';
 
-const items = projects.map((project) => ({ ...project, image: img(project.file) }));
+/** Lightbox ids must be unique and DOM-safe; projects without a gallery key derive one. */
+const slug = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/*
+ * v2 reads the optional `titleV2` / `tagV2` / `textV2` overrides; v1 keeps rendering the
+ * original `title` / `tag` / `text` verbatim, so the two versions can carry different copy
+ * from the same data.
+ *
+ * Every card opens a lightbox. Projects with a `gallery` key show that whole set; the rest
+ * fall back to their own card photograph as a single slide, so no tile is a dead end.
+ */
+const items = projects.map((project) => {
+  const image = img(project.file);
+  const title = project.titleV2 ?? project.title;
+  const tag = project.tagV2 ?? project.tag;
+  const set = project.gallery ? projectGalleries[project.gallery] : undefined;
+
+  return {
+    ...project,
+    title,
+    tag,
+    text: project.textV2 ?? project.text,
+    image,
+    alt: project.alt ?? `${title} — ${tag}`,
+    lightboxId: `project-${project.gallery ?? slug(title)}`,
+    sources: set
+      ? set.map((item) => ({ src: img(item.file).src, alt: item.alt, credit: item.credit }))
+      : [{ src: image.src, alt: project.alt ?? `${title} — ${tag}`, credit: project.credit }],
+  };
+});
 ---
 
 <LayoutV2
@@ -25,23 +59,40 @@ const items = projects.map((project) => ({ ...project, image: img(project.file) 
         {
           items.map((project, i) => (
             <article class="group" data-reveal data-reveal-delay={(i % 3) * 90}>
-              <div class="overflow-hidden rounded-2xl">
+              <button
+                type="button"
+                data-lightbox-open={project.lightboxId}
+                data-lightbox-index="0"
+                class="relative block w-full overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label={
+                  project.sources.length > 1
+                    ? `Open the ${project.title} gallery`
+                    : `View ${project.title} larger`
+                }
+              >
                 <Image
                   src={project.image}
-                  alt={project.alt ?? `${project.title} — ${project.tag}`}
+                  alt={project.alt}
                   widths={[400, 640, 900]}
                   sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 90vw"
-                  class="aspect-[4/3] w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  class={`aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105 ${project.position ?? 'object-center'}`}
                   loading="lazy"
                 />
-              </div>
+                <span class="absolute inset-0 bg-foreground/0 transition-colors duration-300 group-hover:bg-foreground/10" />
+                {project.sources.length > 1 && (
+                  <span class="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 font-sans text-[0.7rem] uppercase tracking-[0.16em] text-foreground">
+                    {project.sources.length} photos
+                  </span>
+                )}
+              </button>
               <p class="mt-6 font-sans text-eyebrow uppercase tracking-[0.18em] text-accent">
                 {project.tag}
               </p>
               <h2 class="mt-2 font-serif text-title">{project.title}</h2>
-              <p class="mt-3 font-sans text-body text-muted-foreground">
-                {project.text}
-              </p>
+              <p class="mt-3 font-sans text-body text-muted-foreground">{project.text}</p>
+              {project.credit && (
+                <p class="mt-2 font-sans text-xs text-muted-foreground/75">{project.credit}</p>
+              )}
             </article>
           ))
         }
@@ -59,4 +110,10 @@ const items = projects.map((project) => ({ ...project, image: img(project.file) 
       </div>
     </div>
   </section>
+
+  {
+    items.map((project) => (
+      <Lightbox id={project.lightboxId} sources={project.sources} label={project.title} />
+    ))
+  }
 </LayoutV2>

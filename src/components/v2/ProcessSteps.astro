@@ -58,15 +58,33 @@ import { process } from '../../data/content';
 
 <script>
   /* Collapse the steps on phones only. They are authored open so the content survives
-     without JavaScript; here we close them and keep that in sync with the breakpoint. */
+     without JavaScript; here we close them and keep that in sync with the breakpoint.
+
+     From md up the four steps are a static grid, but a <summary> is still a native toggle.
+     Cancelling the click stops the toggle from ever running — reopening the step after the
+     fact would make the text blink out and back. Keyboard activation of a summary dispatches
+     a click too, so this covers Enter and Space as well; `sync` additionally drops the
+     heading out of the tab order at that width, since it is no longer a control. */
   const steps = document.querySelectorAll<HTMLDetailsElement>('.process-step');
 
   if (steps.length) {
     const wide = window.matchMedia('(min-width: 768px)');
 
     const sync = () => {
-      for (const step of steps) step.open = wide.matches;
+      for (const step of steps) {
+        step.open = wide.matches;
+        const summary = step.querySelector('summary');
+        if (!summary) continue;
+        if (wide.matches) summary.setAttribute('tabindex', '-1');
+        else summary.removeAttribute('tabindex');
+      }
     };
+
+    for (const step of steps) {
+      step.querySelector('summary')?.addEventListener('click', (event) => {
+        if (wide.matches) event.preventDefault();
+      });
+    }
 
     sync();
     wide.addEventListener('change', sync);

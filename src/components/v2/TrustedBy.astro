@@ -1,0 +1,70 @@
+---
+import { Image } from 'astro:assets';
+import Section from './Section.astro';
+import { trustedBy } from '../../data/content';
+import { img } from '../../lib/images';
+
+/**
+ * Brands the studio has worked with. Replaces the four text-only facts that stood here before.
+ *
+ * The four marks have very different proportions — a wide TEFAF wordmark, a tall House of Flux
+ * monogram, two stacked wordmarks — so each entry carries its own height class rather than one
+ * shared size, which would leave the monogram looking tiny next to the wordmarks.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const brands = trustedBy.map((brand) => ({
+  ...brand,
+  image: brand.logo ? img(brand.logo) : undefined,
+}));
+---
+
+<Section tone="muted" compact class={className}>
+  <p
+    class="text-center font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground"
+    data-reveal
+  >
+    Trusted by
+  </p>
+
+  <ul class="mt-9 grid grid-cols-2 items-center justify-items-center gap-x-8 gap-y-10 sm:grid-cols-4">
+    {
+      brands.map((brand, i) => (
+        <li data-reveal data-reveal-delay={i * 70}>
+          <a
+            href={brand.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center opacity-65 transition-opacity duration-300 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-secondary"
+            aria-label={`${brand.name} — opens in a new tab`}
+          >
+            {brand.image ? (
+              <Image
+                src={brand.image}
+                alt={brand.name}
+                widths={[240, 480]}
+                sizes="140px"
+                class={`${brand.height} w-auto`}
+                loading="lazy"
+              />
+            ) : (
+              <svg
+                viewBox="0 0 124 29"
+                fill="currentColor"
+                role="img"
+                aria-label={brand.name}
+                class={`${brand.height} w-auto`}
+              >
+                <path d="M0 0h21.465v4.972h-8.038V29H8.042V4.972H0ZM45.679 0v4.972H33.143v6.09H43.21v4.971H33.143v8H46.11V29H27.757V0ZM72.281 0v4.972H59.314V11.6h10.44v4.971h-10.44V29h-5.386V0ZM91.098 22.164h-9.2L79.788 29h-5.8l9.823-29h5.386l9.819 29h-5.8Zm-7.664-4.971h6.132L86.5 7.126ZM123.607 0v4.972h-12.971V11.6h10.445v4.971h-10.445V29h-5.382V0Z" />
+              </svg>
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

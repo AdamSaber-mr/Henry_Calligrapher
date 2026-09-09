@@ -1,0 +1,180 @@
+---
+/**
+ * Full-screen image viewer, extracted from Gallery.astro so a page can hold more than one.
+ *
+ * Every instance owns a unique `id`; anything on the page carrying
+ * `data-lightbox-open="<id>"` plus `data-lightbox-index="<n>"` becomes a trigger. That keeps
+ * the viewer independent of the markup that opens it — a gallery tile and a project card use
+ * the same component.
+ */
+interface Props {
+  id: string;
+  /** `credit` renders as a second caption line, for photographs shot by someone else. */
+  sources: { src: string; alt: string; credit?: string }[];
+  label?: string;
+}
+
+const { id, sources, label = 'Image gallery' } = Astro.props;
+
+const navButton =
+  'absolute top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70';
+---
+
+<div
+  id={id}
+  hidden
+  class="fixed inset-0 z-[70] flex items-center justify-center bg-foreground/95 p-4 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-label={`${label} lightbox`}
+>
+  <button
+    type="button"
+    data-lightbox-close
+    class="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+    aria-label="Close lightbox"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      class="h-6 w-6"
+      aria-hidden="true"
+    >
+      <path d="M18 6 6 18"></path>
+      <path d="m6 6 12 12"></path>
+    </svg>
+  </button>
+
+  {
+    sources.length > 1 && (
+      <>
+        <button
+          type="button"
+          data-lightbox-prev
+          class={`left-4 ${navButton}`}
+          aria-label="Previous image"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-6 w-6"
+            aria-hidden="true"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          data-lightbox-next
+          class={`right-4 ${navButton}`}
+          aria-label="Next image"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-6 w-6"
+            aria-hidden="true"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      </>
+    )
+  }
+
+  <div class="max-h-[85vh] max-w-[92vw]" data-lightbox-stage>
+    <img data-lightbox-image src="" alt="" class="max-h-[78vh] max-w-[92vw] rounded-xl object-contain" />
+    <p data-lightbox-caption class="mt-4 text-center font-sans text-sm text-white/80"></p>
+    <p data-lightbox-credit hidden class="mt-1 text-center font-sans text-xs text-white/55"></p>
+  </div>
+</div>
+
+<script define:vars={{ sources, lightboxId: id }}>
+  const lightbox = document.getElementById(lightboxId);
+  const triggers = document.querySelectorAll(`[data-lightbox-open="${lightboxId}"]`);
+
+  if (lightbox && triggers.length) {
+    const image = lightbox.querySelector('[data-lightbox-image]');
+    const caption = lightbox.querySelector('[data-lightbox-caption]');
+    const credit = lightbox.querySelector('[data-lightbox-credit]');
+    const stage = lightbox.querySelector('[data-lightbox-stage]');
+    const closeBtn = lightbox.querySelector('[data-lightbox-close]');
+    let current = 0;
+    let opener = null;
+
+    const render = () => {
+      const item = sources[current];
+      image.src = item.src;
+      image.alt = item.alt;
+      caption.textContent =
+        sources.length > 1 ? `${item.alt} — ${current + 1} / ${sources.length}` : item.alt;
+      credit.hidden = !item.credit;
+      credit.textContent = item.credit ?? '';
+    };
+
+    const open = (index, trigger) => {
+      current = index;
+      opener = trigger;
+      render();
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    const close = () => {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+      opener?.focus();
+    };
+
+    const step = (delta) => {
+      current = (current + delta + sources.length) % sources.length;
+      render();
+    };
+
+    for (const trigger of triggers) {
+      trigger.addEventListener('click', () => open(Number(trigger.dataset.lightboxIndex ?? 0), trigger));
+    }
+
+    lightbox.addEventListener('click', close);
+    stage.addEventListener('click', (event) => event.stopPropagation());
+    closeBtn.addEventListener('click', close);
+
+    for (const [selector, delta] of [
+      ['[data-lightbox-prev]', -1],
+      ['[data-lightbox-next]', 1],
+    ]) {
+      lightbox.querySelector(selector)?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        step(delta);
+      });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (lightbox.hidden) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowRight') step(1);
+      if (event.key === 'ArrowLeft') step(-1);
+      // Keep focus inside the dialog.
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        closeBtn.focus();
+      }
+    });
+  }
+</script>

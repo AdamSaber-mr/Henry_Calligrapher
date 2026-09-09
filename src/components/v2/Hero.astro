@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Button from './Button.astro';
-import { heroLead, heroTitle, tagline } from '../../data/content';
 import { img } from '../../lib/images';
 
 /*
@@ -22,30 +21,14 @@ const hero = img('petalia-first.jpg');
     class="relative mx-auto grid min-h-[70svh] max-w-6xl items-center gap-12 px-5 py-section sm:px-6 lg:min-h-0 lg:grid-cols-[1.05fr_1fr] lg:gap-20"
   >
     <div class="relative z-10" data-reveal>
+      {/* The brand line moved up into the wordmark band on the landing page, the way the
+          original site opened. What is left here is the offer itself, so the sentence carries
+          the column and is set larger than a normal lead. */}
       <p
-        class="flex items-center gap-3 font-sans text-eyebrow uppercase tracking-[0.24em] text-background/90 lg:text-muted-foreground"
+        class="max-w-md text-balance font-serif text-headline text-background lg:max-w-xl lg:text-foreground"
       >
-        <span class="h-px w-8 shrink-0 bg-accent" aria-hidden="true"></span>
-        Bespoke copperplate calligraphy · Breda
-      </p>
-
-      {/* Short and punchy on a phone; the full brand line returns on desktop, where there
-          is room for it. Only one of the two is ever rendered. */}
-      <h1
-        class="mt-7 max-w-2xl text-balance font-serif text-display text-background lg:mt-6 lg:text-foreground"
-      >
-        <span class="lg:hidden">{heroTitle}</span>
-        <span class="hidden lg:inline">{tagline}</span>
-      </h1>
-
-      <p
-        class="mt-6 max-w-md font-sans text-lead text-background/85 lg:max-w-lg lg:text-muted-foreground"
-      >
-        <span class="lg:hidden">{heroLead}</span>
-        <span class="hidden lg:inline">
-          Calligraphy, engraving and hot foil — three crafts, one goal: turning your message into a
-          lasting, handcrafted detail.
-        </span>
+        Elevate the setting with calligraphy, engraving and hot foiling. Turn your message into a
+        lasting, handcrafted detail.
       </p>
 
       <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
