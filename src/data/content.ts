@@ -205,8 +205,8 @@ export const gallery = [
  * -------------------------------------------------------------------------- */
 
 /**
- * Brands the studio has worked with. Isha supplied these three; the rest follow once the site
- * is live and she can point each brand at the page before asking permission.
+ * Brands the studio has worked with. The rest follow now that the site is live and Isha can
+ * point each brand at the page before asking permission.
  * `logo` is a file under `src/assets/images/trusted/`; TEFAF is drawn inline as an SVG so it
  * stays crisp and inherits the ink colour.
  */
@@ -255,14 +255,6 @@ export const projectGalleries: Record<string, GalleryPhoto[]> = {
     { file: 'activation-wax-seal.jpg', alt: 'Guest holding a monogrammed envelope closed with a wax seal' },
   ],
 };
-
-/** Replaces the original's four empty "Client name" placeholders. */
-export const credentials = [
-  { label: 'Based in', value: 'Breda, the Netherlands' },
-  { label: 'Speciality', value: 'Copperplate calligraphy' },
-  { label: 'Available for', value: 'Live events & studio orders' },
-  { label: 'Also offering', value: 'Engraving & hot foil' },
-];
 
 /** How a commission works. Sourced from Terms sections 2, 3 and 5. */
 export const process = [

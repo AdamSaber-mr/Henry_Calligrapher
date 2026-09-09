@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# aangeleverd bronmateriaal (buiten de build en buiten git)
+_source/
