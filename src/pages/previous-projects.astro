@@ -1,59 +1,111 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { projects } from '../data/content';
+import { Image } from 'astro:assets';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import PageHeader from '../components/v2/PageHeader.astro';
+import Button from '../components/v2/Button.astro';
+import Lightbox from '../components/v2/Lightbox.astro';
+import { projectGalleries, projects } from '../data/content';
+import { img } from '../lib/images';
 
+/** Lightbox ids must be unique and DOM-safe; projects without a gallery key derive one. */
+const slug = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/*
+ * Every card opens a lightbox. Projects with a `gallery` key show that whole set; the rest
+ * fall back to their own card photograph as a single slide, so no tile is a dead end.
+ */
+const items = projects.map((project) => {
+  const image = img(project.file);
+  const { title, tag } = project;
+  const set = project.gallery ? projectGalleries[project.gallery] : undefined;
+
+  return {
+    ...project,
+    image,
+    alt: project.alt ?? `${title} — ${tag}`,
+    lightboxId: `project-${project.gallery ?? slug(title)}`,
+    sources: set
+      ? set.map((item) => ({ src: img(item.file).src, alt: item.alt, credit: item.credit }))
+      : [{ src: image.src, alt: project.alt ?? `${title} — ${tag}`, credit: project.credit }],
+  };
+});
 ---
 
-<Layout
+<LayoutV2
   title="Previous Projects — Henry Calligraphy"
   description="A selection of bespoke calligraphy, engraving and hot foil projects by Henry Calligraphy."
 >
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24 text-center">
-      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-        Portfolio
-      </p>
-      <h1 class="mt-5 font-serif text-4xl leading-tight md:text-6xl">Previous projects</h1>
-      <p class="mx-auto mt-6 max-w-2xl font-sans text-sm leading-relaxed text-muted-foreground">
-        A glimpse into recent commissions — from wedding stationery and live event personalisation
-        to engraved gifts and foiled details.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="Portfolio"
+    title="Previous projects"
+    lead="A glimpse into recent commissions — from wedding stationery and live event personalisation to engraved gifts and foiled details."
+  />
 
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24">
-      <h2 class="font-serif text-2xl md:text-3xl">Selected commissions</h2>
-      <div class="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+  <section>
+    <div class="mx-auto max-w-6xl px-5 py-section sm:px-6">
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
         {
-          projects.map((project) => (
-            <article class="group">
-              <div
-                class="relative overflow-hidden bg-secondary h-72 w-full"
-                role="img"
-                aria-label={`${project.title} — ${project.tag}`}
+          items.map((project, i) => (
+            <article class="group" data-reveal data-reveal-delay={(i % 3) * 90}>
+              <button
+                type="button"
+                data-lightbox-open={project.lightboxId}
+                data-lightbox-index="0"
+                class="relative block w-full overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label={
+                  project.sources.length > 1
+                    ? `Open the ${project.title} gallery`
+                    : `View ${project.title} larger`
+                }
               >
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,var(--color-background),transparent_70%)] opacity-70" />
-                <div class="absolute inset-3 border border-border" />
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="px-6 text-center font-sans text-[0.65rem] uppercase tracking-[0.35em] text-muted-foreground">
-                    {project.title} — {project.tag}
+                <Image
+                  src={project.image}
+                  alt={project.alt}
+                  widths={[400, 640, 900]}
+                  sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 90vw"
+                  class={`aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105 ${project.position ?? 'object-center'}`}
+                  loading="lazy"
+                />
+                <span class="absolute inset-0 bg-foreground/0 transition-colors duration-300 group-hover:bg-foreground/10" />
+                {project.sources.length > 1 && (
+                  <span class="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 font-sans text-[0.7rem] uppercase tracking-[0.16em] text-foreground">
+                    {project.sources.length} photos
                   </span>
-                </div>
-              </div>
-              <div class="mt-5 flex items-baseline justify-between gap-4">
-                <h3 class="font-serif text-xl">{project.title}</h3>
-                <span class="shrink-0 font-sans text-[0.6rem] uppercase tracking-[0.25em] text-accent">
-                  {project.tag}
-                </span>
-              </div>
-              <p class="mt-2 font-sans text-sm leading-relaxed text-muted-foreground">
-                {project.text}
+                )}
+              </button>
+              <p class="mt-6 font-sans text-eyebrow uppercase tracking-[0.18em] text-accent">
+                {project.tag}
               </p>
+              <h2 class="mt-2 font-serif text-title">{project.title}</h2>
+              <p class="mt-3 font-sans text-body text-muted-foreground">{project.text}</p>
+              {project.credit && (
+                <p class="mt-2 font-sans text-xs text-muted-foreground/75">{project.credit}</p>
+              )}
             </article>
           ))
         }
       </div>
+
+      <div class="mt-16 rounded-2xl border border-foreground/10 bg-secondary/50 px-8 py-12 text-center" data-reveal>
+        <h2 class="font-serif text-headline">Something similar in mind?</h2>
+        <p class="mx-auto mt-4 max-w-md font-sans text-lead text-muted-foreground">
+          Every commission is quoted individually — tell me about the occasion, the pieces and the
+          date.
+        </p>
+        <div class="mt-8 flex justify-center">
+          <Button href="/contact" variant="accent">Commission inquiry</Button>
+        </div>
+      </div>
     </div>
   </section>
-</Layout>
+
+  {
+    items.map((project) => (
+      <Lightbox id={project.lightboxId} sources={project.sources} label={project.title} />
+    ))
+  }
+</LayoutV2>

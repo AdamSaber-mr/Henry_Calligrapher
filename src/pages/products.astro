@@ -1,76 +1,81 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { mailto } from '../data/content';
+import { Image } from 'astro:assets';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import PageHeader from '../components/v2/PageHeader.astro';
+import Button from '../components/v2/Button.astro';
+import ContactBanner from '../components/v2/ContactBanner.astro';
+import ReadMore from '../components/v2/ReadMore.astro';
+import { img } from '../lib/images';
 
-const productMailto = mailto.product;
-
-const ctaClass =
-  'mt-8 inline-flex items-center border border-foreground px-8 py-3 font-sans text-[0.65rem] uppercase tracking-[0.3em] transition-colors hover:bg-foreground hover:text-background';
+const products = [
+  {
+    title: 'Tricolore Oysters',
+    image: img('tricolore-oysters.jpg'),
+    alt: 'Tricolore Oysters — hand-lettered oyster shells in a wooden gift box',
+    reversed: false,
+    body: [
+      'Make your event even more memorable with our signature oyster placecards. A memory, quote or a name, hand-lettered in classic copperplate script. Each oyster scrubbed, treated, prepped and painted entirely by hand. We begin with an iridescent white base, allowing the oyster’s natural inner hues to beautifully glow through. It is then finished using our signature Tricolore painting method – a delicate combination of yellow gold, bronze gold, and silver paint. The result is a touch of sparkle and glamour with a nostalgic charm, transforming each oyster into a truly unique keepsake.',
+    ],
+    note: 'Presented in a chic wooden gift box.',
+    collapse: true,
+  },
+  {
+    title: 'Personalised Notebooks',
+    image: img('personalized-notebooks.jpg'),
+    alt: 'Personalised black notebook with Henry Calligraphy embossed in gold',
+    reversed: true,
+    body: [
+      'A timeless, black, high quality Sakura notebook, hand-foiled with your name, initials or your favorite quote. A personal gift to others or to yourself.',
+    ],
+    note: 'The perfect day-to-day tool, made extra special through calligraphy.',
+    collapse: false,
+  },
+];
 ---
 
-<Layout
+<LayoutV2
   title="Products — Henry Calligraphy"
   description="Bespoke calligraphy products and paper goods by Henry Calligraphy. Carefully crafted, personalised, and ready to elevate your moments."
 >
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24 text-center">
-      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-        Bespoke goods
-      </p>
-      <h1 class="mt-5 font-serif text-4xl leading-tight md:text-6xl">Products</h1>
-      <p class="mx-auto mt-6 max-w-2xl font-sans text-sm leading-relaxed text-muted-foreground">
-        A curated selection of calligraphy-based products and paper goods, each designed to add a
-        personal, handcrafted touch to your everyday moments and celebrations.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="Bespoke goods"
+    title="Products"
+    lead="A curated selection of personalised products and paper goods, each designed to add a personal, handcrafted touch to your everyday moments and celebrations."
+  />
 
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
-      <img
-        src="/images/tricolore-oysters.jpg"
-        alt="Tricolore Oysters — hand-lettered oyster shells in a wooden gift box"
-        class="aspect-[3/4] w-full object-cover object-center sm:aspect-auto sm:h-96 md:h-[28rem]"
-      />
-      <div>
-        <h2 class="font-serif text-3xl leading-tight md:text-4xl">Tricolore Oysters</h2>
-        <div class="mt-6 space-y-4 font-sans text-sm leading-relaxed text-muted-foreground">
-          <p>
-            Make your event even more memorable with our signature oyster placecards. A memory,
-            quote or a name, hand-lettered in classic copperplate script. Each oyster scrubbed,
-            treated, prepped and painted entirely by hand. We begin with an iridescent white base,
-            allowing the oyster’s natural inner hues to beautifully glow through. It is then
-            finished using our signature Tricolore painting method – a delicate combination of
-            yellow gold, bronze gold, and silver paing. The result is a touch of sparkle and glamour
-            with a nostalgic charm, transforming each oyster into a truly unique keepsake.
-          </p>
-          <p class="font-medium text-foreground">Presented in a chic wooden gift box.</p>
+  {
+    products.map((product) => (
+      <section class="border-b border-foreground/10">
+        <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-section sm:px-6 lg:grid-cols-2 lg:gap-16">
+          <div class={`overflow-hidden rounded-2xl ${product.reversed ? 'lg:order-2' : ''}`} data-reveal>
+            <Image
+              src={product.image}
+              alt={product.alt}
+              widths={[560, 840, 1120]}
+              sizes="(min-width: 1024px) 32rem, 92vw"
+              class="aspect-[4/5] w-full object-cover object-center transition-transform duration-700 hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+          <div class={product.reversed ? 'lg:order-1' : ''} data-reveal data-reveal-delay="100">
+            <h2 class="font-serif text-headline">{product.title}</h2>
+            <ReadMore class="mt-6" maxHeight={product.collapse ? '12rem' : '100rem'}>
+              <div class="space-y-4 font-sans text-lead text-muted-foreground">
+                {product.body.map((paragraph) => (
+                  <p>{paragraph}</p>
+                ))}
+                <p class="font-medium text-foreground">{product.note}</p>
+              </div>
+            </ReadMore>
+            <div class="mt-9">
+              <Button href="/contact?subject=product#form" variant="outline">
+                Inquire about {product.title}
+              </Button>
+            </div>
+          </div>
         </div>
-        <a href={productMailto} class={ctaClass}>Inquire about Tricolore Oysters</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
-      <div class="order-2 md:order-1">
-        <h2 class="font-serif text-3xl leading-tight md:text-4xl">Personalised Notebooks</h2>
-        <div class="mt-6 space-y-4 font-sans text-sm leading-relaxed text-muted-foreground">
-          <p>
-            A timeless black notebook, hand-foiled with your name, initials or your favorite quote.
-            A personal gift to others or to yourself.
-          </p>
-          <p class="font-medium text-foreground">
-            The perfect day-to-day tool, made extra special through calligraphy.
-          </p>
-        </div>
-        <a href={productMailto} class={ctaClass}>Inquire about Personalised Notebooks</a>
-      </div>
-      <img
-        src="/images/personalized-notebooks.jpg"
-        alt="Personalised black notebook with Henry Calligraphy embossed in gold"
-        class="order-1 aspect-[3/4] w-full object-cover object-center sm:aspect-auto sm:h-96 md:order-2 md:h-[28rem]"
-      />
-    </div>
-  </section>
-</Layout>
+      </section>
+    ))
+  }
+  <ContactBanner />
+</LayoutV2>

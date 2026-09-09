@@ -8,16 +8,13 @@ import { img } from '../../lib/images';
    was generated. v1 keeps using the untouched original. */
 const wordmark = img('henry-wordmark-alpha.png');
 
-/** v1 hrefs live at the site root; the redesign is namespaced under /v2. */
-const v2Href: Record<string, string> = { '/#inquiry': '/v2/contact' };
-const toV2 = (href: string) => v2Href[href] ?? `/v2${href}`;
-
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const links = navLinks.map((link) => {
-  const href = toV2(link.href);
-  return { href, label: link.label, active: path === href };
-});
-const petaliaActive = path === '/v2/petalia';
+const links = navLinks.map((link) => ({
+  href: link.href,
+  label: link.label,
+  active: path === link.href,
+}));
+const petaliaActive = path === '/petalia';
 
 const deskLink =
   'font-sans text-[0.78rem] uppercase tracking-[0.2em] transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background';
@@ -34,7 +31,7 @@ const pill =
     id="header-inner"
   >
     <a
-      href="/v2"
+      href="/"
       class="shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
       aria-label="Henry Calligraphy — home"
     >
@@ -64,7 +61,7 @@ const pill =
           ))
         }
         <li>
-          <a href="/v2/petalia" class={pill} aria-current={petaliaActive ? 'page' : undefined}>
+          <a href="/petalia" class={pill} aria-current={petaliaActive ? 'page' : undefined}>
             Pétalia Collection
           </a>
         </li>
@@ -152,7 +149,7 @@ const pill =
           ))
         }
       </ul>
-      <a href="/v2/petalia" class={`${pill} mt-8 w-full`}>Pétalia Collection</a>
+      <a href="/petalia" class={`${pill} mt-8 w-full`}>Pétalia Collection</a>
     </nav>
 
     <div class="border-t border-foreground/10 px-5 py-5 font-sans text-sm text-muted-foreground">

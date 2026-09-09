@@ -1,62 +1,80 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { mailto, serviceSections } from '../data/content';
+import { Image } from 'astro:assets';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import PageHeader from '../components/v2/PageHeader.astro';
+import Section from '../components/v2/Section.astro';
+import Button from '../components/v2/Button.astro';
+import ContactBanner from '../components/v2/ContactBanner.astro';
+import { serviceSections } from '../data/content';
+import { img } from '../lib/images';
 
-const serviceMailto = mailto.service;
-
-const services = serviceSections.map((section) => ({
-  ...section,
-  image: `/images/${section.file}`,
-}));
+const sections = serviceSections.map((section) => ({ ...section, image: img(section.file) }));
 ---
 
-<Layout
+<LayoutV2
   title="Services — Henry Calligraphy"
   description="Bespoke calligraphy, engraving and hot foil services by Henry Calligraphy. Handcrafted details that elevate weddings, events and brands."
 >
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24 text-center">
-      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-        Bespoke craftsmanship
-      </p>
-      <h1 class="mt-5 font-serif text-4xl leading-tight md:text-6xl">Services</h1>
-      <p class="mx-auto mt-6 max-w-2xl font-sans text-sm leading-relaxed text-muted-foreground">
-        Calligraphy, engraving and hot foil — three crafts, one goal: turning your message into a
-        lasting, handcrafted detail.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="Bespoke craftsmanship"
+    title="Services"
+    lead="Elevate the setting with calligraphy, engraving and hot foiling. Turn your message into a lasting, handcrafted detail."
+  />
+
+  <nav aria-label="Services" class="border-t border-foreground/10">
+    <ul class="mx-auto flex max-w-6xl flex-wrap gap-3 px-5 py-5 sm:px-6">
+      {
+        sections.map((section) => (
+          <li>
+            <a
+              href={`#${section.id}`}
+              class="inline-flex min-h-[2.75rem] items-center rounded-full border border-foreground/20 px-5 font-sans text-eyebrow uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-accent hover:text-accent"
+            >
+              {section.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 
   {
-    services.map((service) => (
-      <section class="border-b border-foreground/15">
-        <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
-          <img
-            src={service.image}
-            alt={service.alt}
-            class={`aspect-[3/4] w-full object-cover object-center sm:aspect-auto sm:h-96 md:h-[28rem] ${
-              service.reversed ? 'order-1 md:order-2' : ''
-            }`}
-          />
-          <div class={service.reversed ? 'order-2 md:order-1' : ''}>
-            <h2 class="font-serif text-3xl leading-tight md:text-4xl">{service.title}</h2>
-            <ul class="mt-6 space-y-3 font-sans text-sm leading-relaxed text-muted-foreground">
-              {service.items.map((item) => (
-                <li class="flex gap-3">
-                  <span aria-hidden="true" class="mt-2.5 h-px w-4 shrink-0 bg-accent" />
+    sections.map((section) => (
+      <Section id={section.id}>
+        <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div
+            class={`overflow-hidden rounded-2xl ${section.reversed ? 'lg:order-2' : ''}`}
+            data-reveal
+          >
+            <Image
+              src={section.image}
+              alt={section.alt}
+              widths={[560, 840, 1120]}
+              sizes="(min-width: 1024px) 32rem, 92vw"
+              class={`aspect-[3/2] w-full object-cover ${section.position} transition-transform duration-700 hover:scale-105`}
+              loading="lazy"
+            />
+          </div>
+          <div class={section.reversed ? 'lg:order-1' : ''} data-reveal data-reveal-delay="100">
+            <h2 class="font-serif text-headline">{section.title}</h2>
+            <ul class="mt-6 space-y-3.5 font-sans text-lead text-muted-foreground">
+              {section.items.map((item) => (
+                <li class="flex gap-4">
+                  <span aria-hidden="true" class="mt-3.5 h-px w-5 shrink-0 bg-accent" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
-            <a
-              href={serviceMailto}
-              class="mt-8 inline-flex items-center border border-foreground px-8 py-3 font-sans text-[0.65rem] uppercase tracking-[0.3em] transition-colors hover:bg-foreground hover:text-background"
-            >
-              Inquire about {service.title}
-            </a>
+            <div class="mt-8">
+              <Button href="/contact?subject=service#form" variant="outline">
+                Inquire about {section.title}
+              </Button>
+            </div>
           </div>
         </div>
-      </section>
+      </Section>
     ))
   }
-</Layout>
+
+  <ContactBanner />
+</LayoutV2>

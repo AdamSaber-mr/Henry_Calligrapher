@@ -3,14 +3,15 @@ import '../styles/global.css';
 import HeaderV2 from '../components/v2/Header.astro';
 import FooterV2 from '../components/v2/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
-import VersionSwitch from '../components/VersionSwitch.astro';
 
 interface Props {
   title: string;
   description: string;
+  /** Structured data for the page, serialised into a ld+json block. */
+  jsonLd?: Record<string, unknown>;
 }
 
-const { title, description } = Astro.props;
+const { title, description, jsonLd } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
@@ -25,9 +26,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.png" type="image/png" />
 
-    {/* The redesign lives alongside the replica; keep it out of search results so the
-        two versions do not compete for the same queries. */}
-    <meta name="robots" content="noindex, follow" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
 
     <meta property="og:site_name" content="Henry Calligraphy" />
     <meta property="og:title" content={title} />
@@ -63,7 +63,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     </div>
 
     <CookieBanner />
-    <VersionSwitch />
 
     <script>
       const reveal = () => {

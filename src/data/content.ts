@@ -1,13 +1,9 @@
 /**
- * Copy shared by both versions of the site.
+ * Copy for the site. Wording is the client's own, including her curly apostrophes and em
+ * dashes — leave those alone.
  *
- * v1 (`src/pages/*.astro`) is a 1:1 replica of the original site and must keep rendering
- * byte-identical output — so the strings here are verbatim, including the original's
- * curly apostrophes and em dashes. v2 (`src/pages/v2/*.astro`) reuses the same data with a
- * different presentation.
- *
- * Images are stored as bare file names: v1 resolves them to `/images/<file>` from `public/`,
- * v2 resolves them through `src/lib/images.ts` so `astro:assets` can optimise them.
+ * Images are stored as bare file names and resolved through `src/lib/images.ts`, so
+ * `astro:assets` can optimise them.
  */
 
 export const email = 'info@henrycalligraphy.com';
@@ -29,7 +25,7 @@ export const navLinks = [
   { href: '/products', label: 'Products', match: '/products' },
   { href: '/previous-projects', label: 'Projects', match: '/previous-projects' },
   { href: '/about', label: 'About', match: '/about' },
-  { href: '/#inquiry', label: 'Contact', match: '/' },
+  { href: '/contact', label: 'Contact', match: '/contact' },
 ];
 
 const serviceItems = {
@@ -47,10 +43,8 @@ type HomeService = {
   file: string;
   alt: string;
   position: string;
-  /** Rendered verbatim by v1 — use `titleV2` to change the v2 wording. */
   title: string;
   items: string[];
-  titleV2?: string;
 };
 
 export const homeServices: HomeService[] = [
@@ -72,9 +66,7 @@ export const homeServices: HomeService[] = [
     file: 'hot-foil-notebook.jpg',
     alt: 'Service photograph — hot foil stamping on notebook',
     position: 'object-[50%_70%]',
-    title: 'Hot foil',
-    // Matches the services page: the craft is called hot foiling. v1 keeps the original.
-    titleV2: 'Hot foiling',
+    title: 'Hot foiling',
     items: serviceItems.hotFoil,
   },
 ];
@@ -82,21 +74,18 @@ export const homeServices: HomeService[] = [
 /**
  * The three sections on the services page. Same items, different photography and alt text.
  *
- * `position` and `titleV2` are read by v2 only; v1 keeps its own hardcoded classes and the
- * original title. The photos are 2:3 portraits shown in a 3:2 frame, so only ~44% of the image
- * height survives the crop and each needs its own focal point — centring the notebook cuts the
- * gold foil lettering in half.
+ * The photos are 2:3 portraits shown in a 3:2 frame, so only ~44% of the image height survives
+ * the crop and each needs its own focal point — centring the notebook cuts the gold foil
+ * lettering in half.
  */
 type ServiceSection = {
   id: string;
-  /** Rendered verbatim by v1 — use `titleV2` to change the v2 wording. */
   title: string;
   file: string;
   alt: string;
   reversed: boolean;
   position: string;
   items: string[];
-  titleV2?: string;
 };
 
 export const serviceSections: ServiceSection[] = [
@@ -120,9 +109,7 @@ export const serviceSections: ServiceSection[] = [
   },
   {
     id: 'hot-foil',
-    title: 'Hot foil',
-    // The service is called hot foiling; v1 keeps the original wording.
-    titleV2: 'Hot foiling',
+    title: 'Hot foiling',
     file: 'hot-foil-notebook.jpg',
     alt: 'Black notebook hot foiled with Henry Calligraphy in gold',
     reversed: false,
@@ -135,21 +122,14 @@ export const serviceSections: ServiceSection[] = [
  * Selected commissions. The original site shows these as empty placeholder tiles; v2 pairs each
  * one with an illustrative photograph from the studio's existing library.
  *
- * `title`, `tag` and `text` are rendered verbatim by v1 (four times per entry, in
- * `src/pages/previous-projects.astro`), so the client's copy corrections live in the optional
- * `titleV2` / `tagV2` / `textV2` overrides instead — same additive pattern as
- * `serviceSections[].position`. `file`, `credit` and `gallery` are read by v2 only.
+ * `credit` renders under the card and in the lightbox; `gallery` keys into `projectGalleries`
+ * and turns the card into a multi-photo set.
  */
 type Project = {
-  /** Rendered verbatim by v1 — do not edit these three to change v2 copy. */
   title: string;
   tag: string;
   text: string;
-  /** v2 only, all optional. */
   file: string;
-  titleV2?: string;
-  tagV2?: string;
-  textV2?: string;
   alt?: string;
   credit?: string;
   /** object-position for the card crop, as on `homeServices`. Defaults to centre. */
@@ -169,9 +149,8 @@ export const projects: Project[] = [
   {
     title: 'Brand activation',
     tag: 'Live calligraphy',
-    text: 'On-site personalisation of leather goods for a luxury fragrance launch.',
+    text: 'On-site personalisation of private gatherings and events.',
     file: 'live-waxseal.jpg',
-    textV2: 'On-site personalisation of private gatherings and events.',
     gallery: 'brand-activation',
   },
   {
@@ -181,31 +160,25 @@ export const projects: Project[] = [
     file: 'engraving-glass.jpg',
   },
   {
-    title: 'Hot foil event details',
-    tag: 'Hot foil',
-    text: 'Gold-foiled menus and place cards for a seated corporate dinner.',
+    title: 'Hot foiling event details',
+    tag: 'Hot foiling',
+    text: 'Bespoke leather gifts',
     file: 'hot-foil-notebook.jpg',
     // 2:3 portrait in a 4:3 frame, so most of the height is cropped away. Centring lands on
     // the wood and the chess set; the same shift the home page uses brings the notebook back.
     position: 'object-[50%_70%]',
-    tagV2: 'Hot foiling',
-    titleV2: 'Hot foiling event details',
-    textV2: 'Bespoke leather gifts',
   },
   {
-    title: 'Bespoke vow booklets',
+    title: 'Birth cards and announcements',
     tag: 'Calligraphy',
-    text: 'Hand-lettered vow books and love letters written in classic Copperplate.',
+    text: 'Hand-lettered birth announcements and keepsake cards in classic Copperplate.',
     file: 'studio-orders.jpg',
-    titleV2: 'Birth cards and announcements',
-    textV2: 'Hand-lettered birth announcements and keepsake cards in classic Copperplate.',
   },
   {
     title: 'Private celebration',
     tag: 'Studio order',
-    text: 'A complete stationery set designed around pressed florals from the Pétalia Collection.',
+    text: 'Bespoke details for your event.',
     file: 'tefaf-alexander-adler.jpg',
-    textV2: 'Bespoke details for your event.',
     alt: 'Copperplate place card for Alexander Adler at a TEFAF Maastricht dinner',
     credit: 'Photos by Maison Rowena. Courtesy of TEFAF.',
   },

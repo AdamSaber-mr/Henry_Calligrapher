@@ -1,280 +1,138 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { gallery as galleryItems } from '../data/content';
+import { Image } from 'astro:assets';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import PageHeader from '../components/v2/PageHeader.astro';
+import Section from '../components/v2/Section.astro';
+import FeatureSplit from '../components/v2/FeatureSplit.astro';
+import Gallery from '../components/v2/Gallery.astro';
+import ReadMore from '../components/v2/ReadMore.astro';
+import { img } from '../lib/images';
 
-const gallery = galleryItems.map((item) => ({ src: `/images/${item.file}`, alt: item.alt }));
-
-const iconClass = 'h-6 w-6';
-const navButtonClass =
-  'absolute top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20';
+const hero = img('petalia-hero.jpg');
 ---
 
-<Layout
+<LayoutV2
   title="Pétalia Collection — Henry Calligraphy"
   description="Pétalia: where flowers and calligraphy become one. Curated fine paper and card designs created from real pressed flowers."
 >
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24 text-center">
-      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-        Botanical paper &amp; cards
-      </p>
-      <h1 class="mt-5 font-serif text-4xl leading-tight md:text-6xl">Pétalia Collection</h1>
-      <p class="mx-auto mt-6 max-w-2xl font-serif text-xl italic text-muted-foreground md:text-2xl">
-        Where flowers and calligraphy become one.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="Botanical paper & cards"
+    title="Pétalia Collection"
+    lead="Where flowers and calligraphy become one."
+    center
+    divider={false}
+  />
 
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
-      <div class="order-2 md:order-1">
-        <h2 class="font-serif text-3xl leading-tight md:text-4xl">Curated from real flowers</h2>
-        <div class="mt-6 space-y-4 font-sans text-sm leading-relaxed text-muted-foreground">
-          <p>
-            Pétalia is a curated collection of fine paper and card designs, created from real
-            flowers that have been carefully pressed, preserved and composed by hand.
-          </p>
-          <p>
-            Each botanical composition is thoughtfully arranged to capture the natural beauty,
-            texture and character of the flowers. The original artwork is then meticulously scanned
-            and transformed into refined, high-quality paper and card designs that can be
-            reproduced.
-          </p>
-          <p>
-            For a truly bespoke finish, each piece can be individually embellished with hand-applied
-            calligraphy, creating a personal detail that makes every item feel considered and
-            unique.
-          </p>
-          <p>
-            Designed to elevate a space, a celebration or meaningful moment, Pétalia brings together
-            the delicacy of real flowers with the timeless art of calligraphy.
-          </p>
-        </div>
-      </div>
-      <img
-        src="/images/petalia-first.jpg"
-        alt="Pétalia botanical Save the Date cards with a fresh rose"
-        class="order-1 aspect-[4/3] w-full object-cover object-[62%_62%] sm:aspect-auto sm:h-96 md:order-2 md:h-[28rem]"
-      />
-    </div>
-  </section>
-
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24">
-      <div class="grid gap-10 md:grid-cols-2">
-        <article>
-          <img
-            src="/images/petalia-bespoke.jpg"
-            alt="Bespoke Pétalia invitation cards with pressed pink carnations and copperplate calligraphy"
-            class="aspect-[2/1] w-full object-cover object-[35%_45%] sm:aspect-auto sm:h-72"
-          />
-          <h3 class="mt-8 font-serif text-2xl">Bespoke Pétalia designs</h3>
-          <div class="mt-4 space-y-3 font-sans text-sm leading-relaxed text-muted-foreground">
-            <p class="font-medium text-foreground">
-              You choose the flowers, I create the composition. Together, we make it yours.
-            </p>
-            <p>
-              Select the flowers that hold meaning to you and leave the artistry to me. Together we
-              will thoughtfully curate and compose your chosen blooms into a unique design.
-            </p>
-            <p>
-              Once you've chosen your design, you can add bespoke calligraphy for a beautifully
-              personalized finish – or keep the cards as they are and write your own message.
-            </p>
-          </div>
-        </article>
-        <article>
-          <img
-            src="/images/petalia-keepsake.jpg"
-            alt="Finished Pétalia botanical cards with copperplate calligraphy"
-            class="aspect-[2/1] w-full object-cover object-[45%_35%] sm:aspect-auto sm:h-72"
-          />
-          <h3 class="mt-8 font-serif text-2xl">A lasting keepsake</h3>
-          <div class="mt-4 space-y-3 font-sans text-sm leading-relaxed text-muted-foreground">
-            <p>
-              Whether you choose calligraphy or add a handwritten note of your own, each Pétalia
-              piece is designed to make your message feel as special as the flowers that inspired
-              it.
-            </p>
-            <p>Your Pétalia piece can be framed and cherished as a lasting keepsake.</p>
-            <p class="pt-2 font-medium text-foreground">
-              Choose your favorite design from The Pétalia Collection, or create something entirely
-              your own.
-            </p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-6xl px-6 py-24">
-      <h2 class="text-center font-serif text-3xl leading-tight md:text-4xl">Collection gallery</h2>
-      <div class="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" id="gallery">
-        {
-          gallery.map((item, index) => (
-            <div>
-              <button
-                type="button"
-                data-lightbox-index={index}
-                class="group relative block aspect-square w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
-                aria-label={`Open ${item.alt} in lightbox`}
-              >
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                />
-                <span class="sr-only">View larger</span>
-              </button>
-              <p class="mt-2 font-sans text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
-                {item.alt}
-              </p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <div
-    id="lightbox"
-    hidden
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Image gallery lightbox"
-  >
-    <button
-      type="button"
-      data-lightbox-close
-      class="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
-      aria-label="Close lightbox"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class={iconClass}
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18"></path>
-        <path d="m6 6 12 12"></path>
-      </svg>
-    </button>
-    <button
-      type="button"
-      data-lightbox-prev
-      class={`left-4 ${navButtonClass}`}
-      aria-label="Previous image"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class={iconClass}
-        aria-hidden="true"
-      >
-        <path d="m15 18-6-6 6-6"></path>
-      </svg>
-    </button>
-    <button
-      type="button"
-      data-lightbox-next
-      class={`right-4 ${navButtonClass}`}
-      aria-label="Next image"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class={iconClass}
-        aria-hidden="true"
-      >
-        <path d="m9 18 6-6-6-6"></path>
-      </svg>
-    </button>
-    <div class="max-h-[85vh] max-w-[90vw]" data-lightbox-stage>
-      <img data-lightbox-image src="" alt="" class="max-h-[85vh] max-w-[90vw] object-contain" />
-      <p data-lightbox-caption class="mt-3 text-center font-sans text-sm text-white/80"></p>
-    </div>
+  {/* Portrait source in a landscape band, so the crop is weighted towards the cards on the
+      wall rather than centring on the figure. The bottom padding keeps the photograph off the
+      next section's rule, which it would otherwise sit flush against. */}
+  <div class="mx-auto max-w-6xl px-5 pb-12 sm:px-6 sm:pb-16" data-reveal>
+    <Image
+      src={hero}
+      alt="Isha arranging Pétalia pressed-flower cards on a panelled wall"
+      widths={[640, 960, 1440, 1920]}
+      sizes="(min-width: 1152px) 72rem, 100vw"
+      class="aspect-[4/5] w-full rounded-2xl object-cover object-[42%_28%] sm:aspect-[3/2] lg:aspect-[2/1]"
+      loading="eager"
+      fetchpriority="high"
+    />
   </div>
 
-  <script is:inline define:vars={{ gallery }}>
-    (() => {
-      const lightbox = document.getElementById('lightbox');
-      const grid = document.getElementById('gallery');
-      if (!lightbox || !grid) return;
+  <Section>
+    <FeatureSplit
+      eyebrow="The collection"
+      title="Curated from real flowers"
+      file="petalia-first.jpg"
+      alt="Pétalia botanical Save the Date cards with a fresh rose"
+      objectPosition="object-[62%_62%]"
+      bodySize="base"
+      reversed
+    >
+      <ReadMore maxHeight="13rem">
+        <p>
+          Pétalia is a curated collection of fine paper and card designs, created from real flowers
+          that have been carefully pressed, preserved and composed by hand.
+        </p>
+        <p class="mt-4">
+          Each botanical composition is thoughtfully arranged to capture the natural beauty, texture
+          and character of the flowers. The original artwork is then meticulously scanned and
+          transformed into refined, high-quality paper and card designs that can be reproduced.
+        </p>
+        <p class="mt-4">
+          For a truly bespoke finish, each piece can be individually embellished with hand-applied
+          calligraphy, creating a personal detail that makes every item feel considered and unique.
+        </p>
+        <p class="mt-4">
+          Designed to elevate a space, a celebration or meaningful moment, Pétalia brings together the
+          delicacy of real flowers with the timeless art of calligraphy.
+        </p>
+      </ReadMore>
+    </FeatureSplit>
+  </Section>
 
-      const image = lightbox.querySelector('[data-lightbox-image]');
-      const caption = lightbox.querySelector('[data-lightbox-caption]');
-      const stage = lightbox.querySelector('[data-lightbox-stage]');
-      let current = 0;
+  {/* Both blocks are built identically — same ratio, same body size, no inline button —
+      so neither reads as more important than the other.
 
-      const render = () => {
-        const item = gallery[current];
-        image.src = item.src;
-        image.alt = item.alt;
-        caption.textContent = `${item.alt} — ${current + 1} / ${gallery.length}`;
-      };
+      Both photographs were re-cut from the full-resolution brandshoot frames so they show
+      more of the scene than the earlier tight crops did — the cards now sit whole on the wood
+      instead of running out of frame. The files are exactly 3:2, so object-cover has nothing
+      left to trim and no objectPosition is needed. */}
+  <Section>
+    <div class="flex flex-col gap-14 lg:gap-20">
+      <FeatureSplit
+        eyebrow="Made with you"
+        title="Bespoke Pétalia designs"
+        file="petalia-bespoke.jpg"
+        alt="Bespoke Pétalia invitation cards with pressed pink carnations and copperplate calligraphy"
+        ratio="aspect-[3/2]"
+        bodySize="base"
+      >
+        <ReadMore maxHeight="9rem">
+        <p class="font-medium text-foreground">
+          You choose the flowers, I create the composition. Together, we make it yours.
+        </p>
+        <p class="mt-4">
+          Select the flowers that hold meaning to you and leave the artistry to me. Together we will
+          thoughtfully curate and compose your chosen blooms into a unique design.
+        </p>
+        <p class="mt-4">
+          Once you've chosen your design, you can add bespoke calligraphy for a beautifully
+          personalized finish – or keep the cards as they are and write your own message.
+        </p>
+        </ReadMore>
+      </FeatureSplit>
 
-      const open = (index) => {
-        current = index;
-        render();
-        lightbox.hidden = false;
-        document.body.style.overflow = 'hidden';
-      };
+      <FeatureSplit
+        eyebrow="Made to keep"
+        title="A lasting keepsake"
+        file="petalia-keepsake.jpg"
+        alt="Finished Pétalia botanical cards with copperplate calligraphy"
+        ratio="aspect-[3/2]"
+        bodySize="base"
+        reversed
+      >
+        <ReadMore maxHeight="9rem">
+        <p>
+          Whether you choose calligraphy or add a handwritten note of your own, each Pétalia piece is
+          designed to make your message feel as special as the flowers that inspired it.
+        </p>
+        <p class="mt-4">Your Pétalia piece can be framed and cherished as a lasting keepsake.</p>
+        <p class="mt-4 font-medium text-foreground">
+          Choose your favorite design from The Pétalia Collection, or create something entirely your
+          own.
+        </p>
+        </ReadMore>
+      </FeatureSplit>
+    </div>
+  </Section>
 
-      const close = () => {
-        lightbox.hidden = true;
-        document.body.style.overflow = '';
-      };
-
-      const step = (delta) => {
-        current = (current + delta + gallery.length) % gallery.length;
-        render();
-      };
-
-      for (const button of grid.querySelectorAll('[data-lightbox-index]')) {
-        button.addEventListener('click', () => open(Number(button.dataset.lightboxIndex)));
-      }
-
-      lightbox.addEventListener('click', close);
-      stage.addEventListener('click', (event) => event.stopPropagation());
-      lightbox.querySelector('[data-lightbox-close]').addEventListener('click', close);
-      lightbox.querySelector('[data-lightbox-prev]').addEventListener('click', (event) => {
-        event.stopPropagation();
-        step(-1);
-      });
-      lightbox.querySelector('[data-lightbox-next]').addEventListener('click', (event) => {
-        event.stopPropagation();
-        step(1);
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (lightbox.hidden) return;
-        if (event.key === 'Escape') close();
-        if (event.key === 'ArrowRight') step(1);
-        if (event.key === 'ArrowLeft') step(-1);
-      });
-    })();
-  </script>
-</Layout>
+  <Section>
+    <div class="text-center" data-reveal>
+      <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+        The collection
+      </p>
+      <h2 class="mt-4 font-serif text-headline">Collection gallery</h2>
+    </div>
+    <Gallery />
+  </Section>
+</LayoutV2>

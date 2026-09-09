@@ -3,7 +3,7 @@ import Button from './Button.astro';
 import Section from './Section.astro';
 
 interface Props {
-  /** Keeps the old /v2/#inquiry anchor working where it is used. */
+  /** Anchor target, so links like `/#inquiry` land on this band. */
   id?: string;
 }
 
@@ -23,7 +23,7 @@ const { id } = Astro.props;
       </p>
     </div>
     <div class="shrink-0" data-reveal data-reveal-delay="80">
-      <Button href="/v2/contact" variant="onDark">Get in touch</Button>
+      <Button href="/contact" variant="onDark">Get in touch</Button>
     </div>
   </div>
 </Section>

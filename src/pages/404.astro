@@ -1,25 +1,26 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import Button from '../components/v2/Button.astro';
 ---
 
-<Layout
+<LayoutV2
   title="Page not found — Henry Calligraphy"
   description="The page you're looking for doesn't exist or has been moved."
 >
-  <div class="flex min-h-screen items-center justify-center bg-background px-4">
-    <div class="max-w-md text-center">
-      <h1 class="text-7xl font-bold text-foreground">404</h1>
-      <h2 class="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-      <p class="mt-2 text-sm text-muted-foreground">
+  <section>
+    <div class="mx-auto flex max-w-6xl flex-col items-center px-5 py-section text-center sm:px-6" data-reveal>
+      <p class="font-sans text-eyebrow uppercase tracking-[0.24em] text-muted-foreground">
+        Error 404
+      </p>
+      <h1 class="mt-4 max-w-2xl text-balance font-serif text-display">Page not found</h1>
+      <p class="mt-6 max-w-md font-sans text-lead text-muted-foreground">
         The page you're looking for doesn't exist or has been moved.
       </p>
-      <div class="mt-6">
-        <a
-          href="/"
-          class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >Go home</a
-        >
+
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
+        <Button href="/" variant="accent" size="smMd">Back to home</Button>
+        <Button href="/contact" variant="outline" size="smMd">Commission inquiry</Button>
       </div>
     </div>
-  </div>
-</Layout>
+  </section>
+</LayoutV2>

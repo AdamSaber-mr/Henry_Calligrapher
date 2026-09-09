@@ -16,7 +16,7 @@ const cards = homeServices.map((service) => ({ ...service, image: img(service.fi
       <h2 class="mt-4 font-serif text-headline">Together we elevate the setting</h2>
     </div>
     <a
-      href="/v2/services"
+      href="/services"
       class="font-sans text-eyebrow uppercase tracking-[0.2em] text-accent transition-colors hover:text-foreground"
     >
       All services
@@ -37,7 +37,7 @@ const cards = homeServices.map((service) => ({ ...service, image: img(service.fi
               loading="lazy"
             />
           </div>
-          <h3 class="mt-6 font-serif text-title">{card.titleV2 ?? card.title}</h3>
+          <h3 class="mt-6 font-serif text-title">{card.title}</h3>
           <ul class="mt-4 space-y-2.5 font-sans text-body text-muted-foreground">
             {card.items.map((item) => (
               <li class="flex gap-3">

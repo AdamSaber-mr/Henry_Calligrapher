@@ -1,79 +1,94 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import LayoutV2 from '../layouts/LayoutV2.astro';
+import LegalPage from '../components/v2/LegalPage.astro';
 
-const mailClass =
-  'text-foreground underline underline-offset-4 transition-colors hover:text-accent';
+const sections = [
+  { id: 'what-are-cookies', heading: '1. What are cookies?' },
+  { id: 'how-we-use', heading: '2. How we use cookies' },
+  { id: 'third-party', heading: '3. Third-party cookies' },
+  { id: 'managing', heading: '4. Managing cookies' },
+  { id: 'changes', heading: '5. Changes to this policy' },
+  { id: 'contact', heading: '6. Contact' },
+];
+
+const h2 = 'font-serif text-title text-foreground';
+const link = 'text-foreground underline underline-offset-4 transition-colors hover:text-accent';
 ---
 
-<Layout
+<LayoutV2
   title="Cookie Policy — Henry Calligraphy"
   description="Read how Henry Calligraphy uses cookies and similar technologies on this website."
 >
-  <section class="border-b border-foreground/15">
-    <div class="mx-auto max-w-3xl px-6 py-24">
-      <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">Legal</p>
-      <h1 class="mt-5 font-serif text-3xl leading-tight md:text-5xl">Cookie Policy</h1>
-      <div class="mt-10 space-y-8 font-sans text-sm leading-relaxed text-muted-foreground">
-        <section>
-          <h2 class="font-serif text-lg text-foreground">1. What are cookies?</h2>
-          <p class="mt-3">
-            Cookies are small text files that a website stores on your computer or mobile device
-            when you visit the site. They help the site remember your actions and preferences for a
-            period of time, so you don't have to re-enter them whenever you come back or browse from
-            one page to another.
-          </p>
-        </section>
-        <section>
-          <h2 class="font-serif text-lg text-foreground">2. How we use cookies</h2>
-          <p class="mt-3">
-            Henry Calligraphy uses cookies only where they are necessary to provide and improve your
-            experience on this website. We do not use cookies to personally identify you.
-          </p>
-          <ul class="mt-4 list-disc space-y-2 pl-5">
-            <li>
-              <strong class="text-foreground">Essential cookies</strong> — required for the website to
-              function correctly, for example to maintain your session or remember your privacy preferences.
-            </li>
-            <li>
-              <strong class="text-foreground">Analytics cookies</strong> — help us understand how visitors
-              interact with the website, such as which pages are visited most often. Where possible, these
-              are anonymised.
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2 class="font-serif text-lg text-foreground">3. Third-party cookies</h2>
-          <p class="mt-3">
-            Some cookies may be set by trusted third parties whose services we use, such as
-            analytics providers or embedded content platforms. We do not control these cookies and
-            recommend reviewing the cookie policies of those services.
-          </p>
-        </section>
-        <section>
-          <h2 class="font-serif text-lg text-foreground">4. Managing cookies</h2>
-          <p class="mt-3">
-            You can delete or block cookies through your browser settings at any time. Please note
-            that disabling certain cookies may affect how this website looks or functions.
-          </p>
-        </section>
-        <section>
-          <h2 class="font-serif text-lg text-foreground">5. Changes to this policy</h2>
-          <p class="mt-3">
-            We may update this Cookie Policy from time to time to reflect changes in technology,
-            legislation, or our services. The latest version will always be available on this page.
-          </p>
-        </section>
-        <section>
-          <h2 class="font-serif text-lg text-foreground">6. Contact</h2>
-          <p class="mt-3">
-            If you have any questions about this Cookie Policy, please contact us at <a
-              href="mailto:info@henrycalligraphy.com"
-              class={mailClass}>info@henrycalligraphy.com</a
-            >.
-          </p>
-        </section>
-        <p class="pt-4 text-xs text-muted-foreground/70">Last updated: 4 September 2026</p>
-      </div>
-    </div>
-  </section>
-</Layout>
+  <LegalPage title="Cookie Policy" sections={sections} updated="4 September 2026">
+    <section id="what-are-cookies">
+      <h2 class={h2}>1. What are cookies?</h2>
+      <p class="mt-4">
+        Cookies are small text files that a website stores on your computer or mobile device when
+        you visit the site. They help the site remember your actions and preferences for a period of
+        time, so you don't have to re-enter them whenever you come back or browse from one page to
+        another.
+      </p>
+    </section>
+
+    <section id="how-we-use">
+      <h2 class={h2}>2. How we use cookies</h2>
+      <p class="mt-4">
+        Henry Calligraphy uses cookies only where they are necessary to provide and improve your
+        experience on this website. We do not use cookies to personally identify you.
+      </p>
+      <ul class="mt-5 space-y-3">
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="mt-3 h-px w-5 shrink-0 bg-accent"></span>
+          <span
+            ><strong class="font-medium text-foreground">Essential cookies</strong> — required for the
+            website to function correctly, for example to maintain your session or remember your privacy
+            preferences.</span
+          >
+        </li>
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="mt-3 h-px w-5 shrink-0 bg-accent"></span>
+          <span
+            ><strong class="font-medium text-foreground">Analytics cookies</strong> — help us understand
+            how visitors interact with the website, such as which pages are visited most often. Where
+            possible, these are anonymised.</span
+          >
+        </li>
+      </ul>
+    </section>
+
+    <section id="third-party">
+      <h2 class={h2}>3. Third-party cookies</h2>
+      <p class="mt-4">
+        Some cookies may be set by trusted third parties whose services we use, such as analytics
+        providers or embedded content platforms. We do not control these cookies and recommend
+        reviewing the cookie policies of those services.
+      </p>
+    </section>
+
+    <section id="managing">
+      <h2 class={h2}>4. Managing cookies</h2>
+      <p class="mt-4">
+        You can delete or block cookies through your browser settings at any time. Please note that
+        disabling certain cookies may affect how this website looks or functions.
+      </p>
+    </section>
+
+    <section id="changes">
+      <h2 class={h2}>5. Changes to this policy</h2>
+      <p class="mt-4">
+        We may update this Cookie Policy from time to time to reflect changes in technology,
+        legislation, or our services. The latest version will always be available on this page.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2 class={h2}>6. Contact</h2>
+      <p class="mt-4">
+        If you have any questions about this Cookie Policy, please contact us at <a
+          href="mailto:info@henrycalligraphy.com"
+          class={link}>info@henrycalligraphy.com</a
+        >.
+      </p>
+    </section>
+  </LegalPage>
+</LayoutV2>

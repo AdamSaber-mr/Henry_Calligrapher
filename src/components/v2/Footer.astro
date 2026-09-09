@@ -4,12 +4,9 @@ import { email, instagramUrl, navLinks, tagline } from '../../data/content';
 import { img } from '../../lib/images';
 
 const wordmark = img('henry-wordmark-alpha.png');
-const v2Href: Record<string, string> = { '/#inquiry': '/v2/contact' };
-const toV2 = (href: string) => v2Href[href] ?? `/v2${href}`;
-
 const explore = [
-  ...navLinks.map((l) => ({ href: toV2(l.href), label: l.label })),
-  { href: '/v2/petalia', label: 'Pétalia Collection' },
+  ...navLinks.map((l) => ({ href: l.href, label: l.label })),
+  { href: '/petalia', label: 'Pétalia Collection' },
 ];
 
 const linkClass = 'transition-colors hover:text-accent';
@@ -75,8 +72,8 @@ const year = new Date().getFullYear();
     >
       <p>© {year} Henry Calligraphy</p>
       <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-        <a href="/v2/cookie-policy" class={linkClass}>Cookie Policy</a>
-        <a href="/v2/terms-and-conditions" class={linkClass}>Terms and Conditions</a>
+        <a href="/cookie-policy" class={linkClass}>Cookie Policy</a>
+        <a href="/terms-and-conditions" class={linkClass}>Terms and Conditions</a>
       </div>
     </div>
   </div>
