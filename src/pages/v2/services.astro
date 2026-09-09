@@ -8,7 +8,12 @@ import ContactBanner from '../../components/v2/ContactBanner.astro';
 import { serviceSections } from '../../data/content';
 import { img } from '../../lib/images';
 
-const sections = serviceSections.map((section) => ({ ...section, image: img(section.file) }));
+/* `titleV2` overrides the shared title for v2 only, so v1 keeps rendering its own wording. */
+const sections = serviceSections.map((section) => ({
+  ...section,
+  title: section.titleV2 ?? section.title,
+  image: img(section.file),
+}));
 ---
 
 <LayoutV2

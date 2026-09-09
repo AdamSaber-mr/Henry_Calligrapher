@@ -37,7 +37,7 @@ const cards = homeServices.map((service) => ({ ...service, image: img(service.fi
               loading="lazy"
             />
           </div>
-          <h3 class="mt-6 font-serif text-title">{card.title}</h3>
+          <h3 class="mt-6 font-serif text-title">{card.titleV2 ?? card.title}</h3>
           <ul class="mt-4 space-y-2.5 font-sans text-body text-muted-foreground">
             {card.items.map((item) => (
               <li class="flex gap-3">

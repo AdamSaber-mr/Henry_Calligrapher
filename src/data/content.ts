@@ -43,7 +43,17 @@ const serviceItems = {
 };
 
 /** The three service cards on the home page. */
-export const homeServices = [
+type HomeService = {
+  file: string;
+  alt: string;
+  position: string;
+  /** Rendered verbatim by v1 — use `titleV2` to change the v2 wording. */
+  title: string;
+  items: string[];
+  titleV2?: string;
+};
+
+export const homeServices: HomeService[] = [
   {
     file: 'calligraphy-menu.jpg',
     alt: 'Service photograph — copperplate calligraphy menu card',
@@ -63,6 +73,8 @@ export const homeServices = [
     alt: 'Service photograph — hot foil stamping on notebook',
     position: 'object-[50%_70%]',
     title: 'Hot foil',
+    // Matches the services page: the craft is called hot foiling. v1 keeps the original.
+    titleV2: 'Hot foiling',
     items: serviceItems.hotFoil,
   },
 ];
@@ -70,11 +82,24 @@ export const homeServices = [
 /**
  * The three sections on the services page. Same items, different photography and alt text.
  *
- * `position` is used by v2 only. These are 2:3 portraits shown in a 3:2 frame, so only ~44%
- * of the image height survives the crop and each photo needs its own focal point — centring
- * the notebook cuts the gold foil lettering in half. v1 keeps its own hardcoded classes.
+ * `position` and `titleV2` are read by v2 only; v1 keeps its own hardcoded classes and the
+ * original title. The photos are 2:3 portraits shown in a 3:2 frame, so only ~44% of the image
+ * height survives the crop and each needs its own focal point — centring the notebook cuts the
+ * gold foil lettering in half.
  */
-export const serviceSections = [
+type ServiceSection = {
+  id: string;
+  /** Rendered verbatim by v1 — use `titleV2` to change the v2 wording. */
+  title: string;
+  file: string;
+  alt: string;
+  reversed: boolean;
+  position: string;
+  items: string[];
+  titleV2?: string;
+};
+
+export const serviceSections: ServiceSection[] = [
   {
     id: 'calligraphy',
     title: 'Calligraphy',
@@ -96,6 +121,8 @@ export const serviceSections = [
   {
     id: 'hot-foil',
     title: 'Hot foil',
+    // The service is called hot foiling; v1 keeps the original wording.
+    titleV2: 'Hot foiling',
     file: 'hot-foil-notebook.jpg',
     alt: 'Black notebook hot foiled with Henry Calligraphy in gold',
     reversed: false,
