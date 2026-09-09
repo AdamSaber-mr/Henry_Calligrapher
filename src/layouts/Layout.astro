@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-import HeaderV2 from '../components/v2/Header.astro';
-import FooterV2 from '../components/v2/Footer.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
@@ -16,7 +16,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en" data-version="v2">
+<html lang="en" data-site>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -55,11 +55,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     >
 
     <div class="flex min-h-screen flex-col">
-      <HeaderV2 />
+      <Header />
       <main id="main" class="flex-1">
         <slot />
       </main>
-      <FooterV2 />
+      <Footer />
     </div>
 
     <CookieBanner />

@@ -1,14 +1,14 @@
 ---
 import { Image } from 'astro:assets';
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import TrustedBy from '../components/v2/TrustedBy.astro';
-import ServiceCards from '../components/v2/ServiceCards.astro';
-import Section from '../components/v2/Section.astro';
-import FeatureSplit from '../components/v2/FeatureSplit.astro';
-import ProcessSteps from '../components/v2/ProcessSteps.astro';
-import ContactBanner from '../components/v2/ContactBanner.astro';
-import InstagramGrid from '../components/v2/InstagramGrid.astro';
-import Button from '../components/v2/Button.astro';
+import Layout from '../layouts/Layout.astro';
+import TrustedBy from '../components/TrustedBy.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import Section from '../components/Section.astro';
+import FeatureSplit from '../components/FeatureSplit.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import ContactBanner from '../components/ContactBanner.astro';
+import InstagramGrid from '../components/InstagramGrid.astro';
+import Button from '../components/Button.astro';
 import { tagline } from '../data/content';
 import { img } from '../lib/images';
 
@@ -49,7 +49,7 @@ const jsonLd = {
 };
 ---
 
-<LayoutV2
+<Layout
   title="Henry Calligraphy — Bespoke Copperplate Calligraphy in Breda"
   description={description}
   jsonLd={jsonLd}
@@ -128,4 +128,4 @@ const jsonLd = {
   <ProcessSteps />
   <ContactBanner id="inquiry" />
   <InstagramGrid />
-</LayoutV2>
+</Layout>

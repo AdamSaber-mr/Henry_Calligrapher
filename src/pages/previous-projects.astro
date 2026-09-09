@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import PageHeader from '../components/v2/PageHeader.astro';
-import Button from '../components/v2/Button.astro';
-import Lightbox from '../components/v2/Lightbox.astro';
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Button from '../components/Button.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { projectGalleries, projects } from '../data/content';
 import { img } from '../lib/images';
 
@@ -35,7 +35,7 @@ const items = projects.map((project) => {
 });
 ---
 
-<LayoutV2
+<Layout
   title="Previous Projects — Henry Calligraphy"
   description="A selection of bespoke calligraphy, engraving and hot foil projects by Henry Calligraphy."
 >
@@ -108,4 +108,4 @@ const items = projects.map((project) => {
       <Lightbox id={project.lightboxId} sources={project.sources} label={project.title} />
     ))
   }
-</LayoutV2>
+</Layout>

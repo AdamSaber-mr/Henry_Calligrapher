@@ -63,11 +63,11 @@ body {
 }
 
 /* --------------------------------------------------------------------------
- * v2 additions.
+ * Site behaviour on top of the design tokens above.
  *
- * These use theme keys that v1 never references, so the 1:1 replica at `/`
- * cannot be affected by anything below. Behavioural rules are scoped to
- * `[data-version='v2']`, which only LayoutV2 sets on <html>.
+ * Scoped to `[data-site]`, which the layout sets on <html>. The attribute is
+ * what gives these rules the weight to sit above the utility classes, so keep
+ * it even though there is only one layout now.
  * -------------------------------------------------------------------------- */
 
 @theme {
@@ -97,14 +97,13 @@ body {
   --shadow-lift: 0 2px 4px oklch(23% 0.012 60 / 0.05), 0 16px 40px oklch(23% 0.012 60 / 0.1);
 }
 
-[data-version='v2'] {
+[data-site] {
   scroll-behavior: smooth;
 }
 
-/* v1 dekt de linnen-textuur af met een dekkende wrapper (dode CSS in het origineel).
-   v2 laat hem doorschijnen, maar sterk verzwakt met een crème waas erover — op vol
-   vermogen zijn de tegelnaden van de bitmap zichtbaar. */
-[data-version='v2'] body {
+/* De linnen-textuur mag doorschijnen, maar sterk verzwakt met een crème waas erover —
+   op vol vermogen zijn de tegelnaden van de bitmap zichtbaar. */
+[data-site] body {
   background-image:
     linear-gradient(oklch(97.3% 0.008 85 / 0.86), oklch(97.3% 0.008 85 / 0.86)),
     url('/images/linen-texture.jpg');
@@ -114,17 +113,17 @@ body {
 }
 
 /* Keep anchor targets clear of the sticky header. */
-[data-version='v2'] :target {
+[data-site] :target {
   scroll-margin-top: 6rem;
 }
 
 /* Scroll reveal. Elements start hidden only when JS is available to reveal them,
    so the page stays readable with JavaScript disabled. */
-[data-version='v2'] [data-reveal] {
+[data-site] [data-reveal] {
   opacity: 1;
 }
 
-[data-version='v2'].js [data-reveal] {
+[data-site].js [data-reveal] {
   opacity: 0;
   transform: translateY(1.25rem);
   transition:
@@ -132,18 +131,18 @@ body {
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-version='v2'].js [data-reveal].is-visible {
+[data-site].js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-version='v2'] {
+  [data-site] {
     scroll-behavior: auto;
   }
 
-  [data-version='v2'].js [data-reveal],
-  [data-version='v2'].js [data-reveal].is-visible {
+  [data-site].js [data-reveal],
+  [data-site].js [data-reveal].is-visible {
     opacity: 1;
     transform: none;
     transition: none;
@@ -156,44 +155,44 @@ body {
    a mask rather than a gradient overlay, because the page sits on a linen
    texture that a solid overlay colour could not match. */
 
-[data-version='v2'] .readmore-toggle {
+[data-site] .readmore-toggle {
   display: none;
 }
 
 @media (max-width: 767px) {
-  [data-version='v2'].js .readmore-content {
+  [data-site].js .readmore-content {
     max-height: var(--readmore-max, 15rem);
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
   }
 
-  [data-version='v2'].js .readmore[data-expanded] .readmore-content {
+  [data-site].js .readmore[data-expanded] .readmore-content {
     max-height: none;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
-  [data-version='v2'].js .readmore-toggle {
+  [data-site].js .readmore-toggle {
     display: inline-flex;
   }
 
   /* Passage already fits, so there is nothing to reveal. */
-  [data-version='v2'].js .readmore[data-fits] .readmore-content {
+  [data-site].js .readmore[data-fits] .readmore-content {
     -webkit-mask-image: none;
     mask-image: none;
   }
 
-  [data-version='v2'].js .readmore[data-fits] .readmore-toggle {
+  [data-site].js .readmore[data-fits] .readmore-toggle {
     display: none;
   }
 
-  [data-version='v2'].js .readmore[data-expanded] .readmore-chevron {
+  [data-site].js .readmore[data-expanded] .readmore-chevron {
     transform: rotate(180deg);
   }
 }
 
-[data-version='v2'] .readmore-chevron {
+[data-site] .readmore-chevron {
   transition: transform 0.25s ease;
 }
 
@@ -209,28 +208,28 @@ body {
 /* FAQ: show four questions on a phone with the rest one tap away. Scoped to `.js` so a
    visitor without JavaScript simply gets the whole list and no button. */
 
-[data-version='v2'] .faq-toggle {
+[data-site] .faq-toggle {
   display: none;
 }
 
 @media (max-width: 767px) {
-  [data-version='v2'].js .faq-extra {
+  [data-site].js .faq-extra {
     display: none;
   }
 
-  [data-version='v2'].js [data-faq-open] .faq-extra {
+  [data-site].js [data-faq-open] .faq-extra {
     display: block;
   }
 
-  [data-version='v2'].js .faq-toggle {
+  [data-site].js .faq-toggle {
     display: inline-flex;
   }
 
-  [data-version='v2'].js [data-faq-open] .faq-chevron {
+  [data-site].js [data-faq-open] .faq-chevron {
     transform: rotate(180deg);
   }
 }
 
-[data-version='v2'] .faq-chevron {
+[data-site] .faq-chevron {
   transition: transform 0.25s ease;
 }

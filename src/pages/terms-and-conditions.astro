@@ -1,6 +1,6 @@
 ---
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import LegalPage from '../components/v2/LegalPage.astro';
+import Layout from '../layouts/Layout.astro';
+import LegalPage from '../components/LegalPage.astro';
 
 const sections = [
   { id: 'introduction', heading: '1. Introduction' },
@@ -18,7 +18,7 @@ const h2 = 'font-serif text-title text-foreground';
 const link = 'text-foreground underline underline-offset-4 transition-colors hover:text-accent';
 ---
 
-<LayoutV2
+<Layout
   title="Terms and Conditions — Henry Calligraphy"
   description="Terms and conditions for using the Henry Calligraphy website and commissioning bespoke calligraphy services."
 >
@@ -105,4 +105,4 @@ const link = 'text-foreground underline underline-offset-4 transition-colors hov
       </p>
     </section>
   </LegalPage>
-</LayoutV2>
+</Layout>

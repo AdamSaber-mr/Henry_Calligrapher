@@ -119,8 +119,7 @@ export const serviceSections: ServiceSection[] = [
 ];
 
 /**
- * Selected commissions. The original site shows these as empty placeholder tiles; v2 pairs each
- * one with an illustrative photograph from the studio's existing library.
+ * Selected commissions, each paired with a photograph from the studio's library.
  *
  * `credit` renders under the card and in the lightbox; `gallery` keys into `projectGalleries`
  * and turns the card into a multi-photo set.
@@ -199,9 +198,9 @@ export const gallery = [
 ];
 
 /* --------------------------------------------------------------------------
- * v2 only. Every line below is drawn from copy that already exists elsewhere
- * on the site (the home page sections and the Terms and Conditions page), so
- * the redesign adds structure without inventing claims.
+ * Every line below is drawn from copy that already exists elsewhere on the site
+ * (the home page sections and the Terms and Conditions page), so the structure
+ * adds nothing the studio does not already claim.
  * -------------------------------------------------------------------------- */
 
 /**
@@ -235,7 +234,7 @@ export const trustedBy = [
 ];
 
 /**
- * Photo sets behind the project cards on `/v2/previous-projects`. Keyed by the `gallery` field
+ * Photo sets behind the project cards on `/previous-projects`. Keyed by the `gallery` field
  * on a `projects` entry; a card without one stays a plain, non-clickable tile.
  */
 type GalleryPhoto = { file: string; alt: string; credit?: string };

@@ -1,6 +1,6 @@
 ---
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import LegalPage from '../components/v2/LegalPage.astro';
+import Layout from '../layouts/Layout.astro';
+import LegalPage from '../components/LegalPage.astro';
 
 const sections = [
   { id: 'what-are-cookies', heading: '1. What are cookies?' },
@@ -15,7 +15,7 @@ const h2 = 'font-serif text-title text-foreground';
 const link = 'text-foreground underline underline-offset-4 transition-colors hover:text-accent';
 ---
 
-<LayoutV2
+<Layout
   title="Cookie Policy — Henry Calligraphy"
   description="Read how Henry Calligraphy uses cookies and similar technologies on this website."
 >
@@ -91,4 +91,4 @@ const link = 'text-foreground underline underline-offset-4 transition-colors hov
       </p>
     </section>
   </LegalPage>
-</LayoutV2>
+</Layout>

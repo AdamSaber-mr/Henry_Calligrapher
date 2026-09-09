@@ -1,17 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import PageHeader from '../components/v2/PageHeader.astro';
-import Section from '../components/v2/Section.astro';
-import FeatureSplit from '../components/v2/FeatureSplit.astro';
-import Gallery from '../components/v2/Gallery.astro';
-import ReadMore from '../components/v2/ReadMore.astro';
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import FeatureSplit from '../components/FeatureSplit.astro';
+import Gallery from '../components/Gallery.astro';
+import ReadMore from '../components/ReadMore.astro';
 import { img } from '../lib/images';
 
 const hero = img('petalia-hero.jpg');
 ---
 
-<LayoutV2
+<Layout
   title="Pétalia Collection — Henry Calligraphy"
   description="Pétalia: where flowers and calligraphy become one. Curated fine paper and card designs created from real pressed flowers."
 >
@@ -135,4 +135,4 @@ const hero = img('petalia-hero.jpg');
     </div>
     <Gallery />
   </Section>
-</LayoutV2>
+</Layout>

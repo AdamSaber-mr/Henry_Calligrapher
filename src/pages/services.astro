@@ -1,17 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import PageHeader from '../components/v2/PageHeader.astro';
-import Section from '../components/v2/Section.astro';
-import Button from '../components/v2/Button.astro';
-import ContactBanner from '../components/v2/ContactBanner.astro';
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import ContactBanner from '../components/ContactBanner.astro';
 import { serviceSections } from '../data/content';
 import { img } from '../lib/images';
 
 const sections = serviceSections.map((section) => ({ ...section, image: img(section.file) }));
 ---
 
-<LayoutV2
+<Layout
   title="Services — Henry Calligraphy"
   description="Bespoke calligraphy, engraving and hot foil services by Henry Calligraphy. Handcrafted details that elevate weddings, events and brands."
 >
@@ -77,4 +77,4 @@ const sections = serviceSections.map((section) => ({ ...section, image: img(sect
   }
 
   <ContactBanner />
-</LayoutV2>
+</Layout>

@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Section from './Section.astro';
-import { homeServices } from '../../data/content';
-import { img } from '../../lib/images';
+import { homeServices } from '../data/content';
+import { img } from '../lib/images';
 
 const cards = homeServices.map((service) => ({ ...service, image: img(service.file) }));
 ---

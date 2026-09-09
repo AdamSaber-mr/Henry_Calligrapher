@@ -1,11 +1,11 @@
 ---
 import { Image } from 'astro:assets';
-import LayoutV2 from '../layouts/LayoutV2.astro';
-import Section from '../components/v2/Section.astro';
-import ContactBanner from '../components/v2/ContactBanner.astro';
-import InstagramGrid from '../components/v2/InstagramGrid.astro';
-import ReadMore from '../components/v2/ReadMore.astro';
-import Button from '../components/v2/Button.astro';
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import ContactBanner from '../components/ContactBanner.astro';
+import InstagramGrid from '../components/InstagramGrid.astro';
+import ReadMore from '../components/ReadMore.astro';
+import Button from '../components/Button.astro';
 import { img } from '../lib/images';
 
 const portrait = img('2026_Brandshoot-Isha-34.jpg');
@@ -28,7 +28,7 @@ const after = [
 ];
 ---
 
-<LayoutV2
+<Layout
   title="About — Henry Calligraphy"
   description="Meet Isha Henry-Hament, professional copperplate calligrapher based in Breda, the Netherlands."
 >
@@ -81,4 +81,4 @@ const after = [
 
   <InstagramGrid />
   <ContactBanner />
-</LayoutV2>
+</Layout>
